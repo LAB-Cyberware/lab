@@ -460,7 +460,8 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         if (currentStep === 1) {
           
           setItemActual("estudio-mercado")
-          const estudioExistente = await GWV('check',projectId,"estudio-mercado");
+          let estudioExistente = await GWV('check',projectId,"estudio-mercado");
+          estudioExistente = facade(estudioExistente)
           setExisteEstudio(!!estudioExistente);
           //console.log(`######### checkExistence  estudioExistente  ${estudioExistente}  #########`)
           if (estudioExistente) {
