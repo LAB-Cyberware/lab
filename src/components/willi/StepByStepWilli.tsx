@@ -470,14 +470,18 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
           }
         } else if (currentStep === 2) {
           setItemActual("estrategia-marketing")
-          const estrategiaExistente = await GWV('check',projectId,"estrategia-marketing");
+          let estrategiaExistente = await GWV('check',projectId,"estrategia-marketing");
+          estrategiaExistente = facade(estrategiaExistente)
+
           setExisteEstrategia(!!estrategiaExistente);
           if (estrategiaExistente) {
             setDataEstrategiaMarketing(estrategiaExistente);
           }
         } else if (currentStep === 3) {
           setItemActual("campania-marketing")
-          const campaniaExistente = await GWV('check',projectId,"campania-marketing");
+          let campaniaExistente = await GWV('check',projectId,"campania-marketing");
+          campaniaExistente = facade(campaniaExistente)
+
           setExisteCampania(!!campaniaExistente);
           if (campaniaExistente) {
             setDataCampaniaMarketing(campaniaExistente);
