@@ -307,9 +307,13 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
   
   
                     const price = await getPrice(action);
+console.log("???? USE TOKENS price:????")
+console.log(price)
   
                     if (price === null) { // getPrice ahora devuelve null en error
-  
+console.log("???? USE TOKENS PRICE NULL?:????")
+console.log(price)
+ 
                         return { key: action, generated: { texto: `Error: No se pudo determinar el costo de la acción.`, imagen: null } };
   
                     }
@@ -319,7 +323,8 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
                    
   
                     if (saldoActual === null) {
-  
+  console.log("???? USE TOKENS saldo actual NULL???:????")
+console.log(saldoActual)
                         return { key: action, generated: { texto: `Error: No se pudo verificar el saldo.`, imagen: null } };
   
                     }
@@ -327,12 +332,15 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
   
   
                     if (saldoActual >= price) {
-  
+ 
                         const saldoDespuesDelDescuento = saldoActual - price;
-  
+   console.log("???? USE TOKENS saldoActual >= price ???  saldoDespuesDelDescuento: ????")
+console.log(saldoDespuesDelDescuento)
                         const descuentoExitoso = await descontarTokens(saldoDespuesDelDescuento, currentUserEmail);
   
   
+  console.log("???? USE TOKENS descuentoExitoso????")
+console.log(descuentoExitoso)
   
                         if (descuentoExitoso) { // Asumiendo que descontarTokens devuelve algo truthy en éxito
   
