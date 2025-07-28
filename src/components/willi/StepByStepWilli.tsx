@@ -464,10 +464,11 @@ console.log(descuentoExitoso)
 
   // Efecto para verificar existencia de datos cuando cambia el paso
   
-    setEmail(session?.user?.email as string)
     
+
   useEffect(() => {
      setIdProyecto(idProyectoD)
+     setEmail(session?.user?.email as string)
     
 
     const projectId=idProyectoD;
