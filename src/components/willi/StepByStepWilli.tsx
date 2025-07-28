@@ -434,7 +434,7 @@ console.log(descuentoExitoso)
     console.log(itemActual)
     console.log(`######### saveGenData dataItemActual  #########`)
     console.log(dataItemActual)
-      const res = await fetch(`/api/${item}?p=${idProyecto}`,  {
+      const res = await fetch(`/api/${item}`,  {
         method: "POST",
         body: JSON.stringify(bodyData),
         headers: {
