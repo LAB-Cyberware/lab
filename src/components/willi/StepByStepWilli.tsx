@@ -24,7 +24,7 @@ interface MarketingWorkflowProps {
         idProyectoD:string | null;
 }
 
-type InputData = string | null | object | any[];
+type InputData = string | null | object | any[]|undefined;
 
 function facade(data: InputData): any | null {
   if (data === null) {
@@ -548,7 +548,9 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         projectId: idProyecto, 
         item: "estudio-mercado"
       }
-      const estudioData = await useTokens("generate-estudio",itemObjectEstudio)
+      let estudioData = await useTokens("generate-estudio",itemObjectEstudio)
+      estudioData = facade(estudioData)
+
       setDataEstudioMercado(estudioData?.generated as EstudioMercadoData);
       setDataItemActual(estudioData?.generated as EstudioMercadoData);
       // Actualizar el saldo después de consumir tokens
@@ -582,7 +584,9 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         item: "estrategia-marketing", 
         estudio: dataEstudioMercado
       }
-      const estrategiaData = await useTokens("generate-estrategia",itemObjectEstrategia)
+      let estrategiaData = await useTokens("generate-estrategia",itemObjectEstrategia)
+      estrategiaData = facade(estrategiaData)
+
 
       setDataEstrategiaMarketing(estrategiaData?.generated as EstrategiaMarketingData);
       setDataItemActual(estrategiaData?.generated as EstrategiaMarketingData);
@@ -616,7 +620,8 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         estudio: dataEstudioMercado,
         estrategia: dataEstrategiaMarketing
       }
-      const campaniaData = await useTokens("generate-campania",itemObjectCampania)
+      let campaniaData = await useTokens("generate-campania",itemObjectCampania)
+      campaniaData = facade(campaniaData)
       setDataCampaniaMarketing(campaniaData?.generated as CampaniaMarketingData);
       setDataItemActual(campaniaData?.generated as CampaniaMarketingData);
 
