@@ -21,7 +21,7 @@ async function getDataItem(projectId,item){
             //-------------------------/
             //  FIN OK
             //-------------------------/
-            return data[0];
+            return facade(data);
             //-------------------------/
           }else{
             console.log(`getDataItem ${item}: idProyecto(${projectId} Not Found =======================`)
@@ -184,7 +184,7 @@ export default async function GWV(mode,projectId,item,estudio,estrategia){
         if(data){
           console.log(`GWV.${item} UseWilli data:`)
           console.log(data)
-          return data
+          return facade(data)
         }else{
           console.log(`GWV.${item} UseWilli else... no hay data:`)
           console.log(data)

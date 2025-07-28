@@ -290,7 +290,11 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
   
             const useTokens = async (action:any, objectAction:any) => {
   
-               
+               console.log("???? USE TOKENS action:????")
+               console.log(action)
+               console.log("???? USE TOKENS objectAction ????")
+               console.log(objectAction)
+
   
                 if (currentUserEmail) {
   
@@ -359,6 +363,10 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
   
                                 };
                               } else if(resultadoAccion){
+
+                                // OK !
+                                 console.log("???? USE TOKENS retorno OK resultadoAccion:????")
+                                  console.log(resultadoAccion)
   
                                  return {
   
