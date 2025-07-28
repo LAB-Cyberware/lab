@@ -468,7 +468,6 @@ console.log(descuentoExitoso)
 
   useEffect(() => {
      setIdProyecto(idProyectoD)
-     setEmail(session?.user?.email as string)
     
 
     const projectId=idProyectoD;
@@ -556,6 +555,8 @@ console.log(descuentoExitoso)
   
   
   const handleGenerateEstudio = async () => {
+    
+     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
@@ -587,6 +588,8 @@ console.log(descuentoExitoso)
   };
 
   const handleGenerateEstrategia = async () => {
+  
+     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
@@ -623,6 +626,8 @@ console.log(descuentoExitoso)
   };
 
   const handleGenerateCampania = async () => {
+  
+     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
