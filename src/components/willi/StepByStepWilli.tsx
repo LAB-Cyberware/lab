@@ -70,7 +70,9 @@ function facade(data: InputData): any | null {
   
 const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initialEstudio,initialEstrategia,initialCampania}) => {
 
-
+  if(initialEstudio==undefined){initialEstudio=null}
+  if(initialEstrategia==undefined){initialEstrategia=null}
+  if(initialCampania==undefined){initialCampania=null}
   const { data: session } = useSession();
   const [idProyecto, setIdProyecto] = useState<string | null>(idProyectoD);
     

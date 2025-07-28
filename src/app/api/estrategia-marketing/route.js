@@ -14,7 +14,8 @@ export async function GET(request){
         if (idProyecto){
             const data = await EstrategiaMarketing.find({ id_proyecto: idProyecto });
             console.log("=============API ESTTAYEGIA MARKETING SAY:   DATA    ==================")
-            console.log(typeof data)
+            console.log(data)
+            
             return NextResponse.json({data});
         }
       
