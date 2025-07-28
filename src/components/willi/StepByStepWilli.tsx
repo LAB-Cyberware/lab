@@ -295,7 +295,7 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
                console.log("???? USE TOKENS objectAction ????")
                console.log(objectAction)
 
-  
+      
                 if (currentUserEmail) {
   
                     const saldoActual = await validarSaldo(currentUserEmail);
@@ -467,6 +467,13 @@ console.log(descuentoExitoso)
     
 
   useEffect(() => {
+    if(currentUserEmail==null){
+      if (session?.user?.email) {
+          setEmail(session.user.email);
+      }
+    }
+    
+
      setIdProyecto(idProyectoD)
     
 
@@ -556,7 +563,6 @@ console.log(descuentoExitoso)
   
   const handleGenerateEstudio = async () => {
     
-     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
@@ -589,7 +595,6 @@ console.log(descuentoExitoso)
 
   const handleGenerateEstrategia = async () => {
   
-     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
