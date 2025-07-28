@@ -414,7 +414,11 @@ console.log(descuentoExitoso)
   
                     }
   
-                }
+                }else{
+     console.log("???? USE TOKENS Error con el currentUserEmail:  ????")
+     console.log(currentUserEmail)
+     return { key: action, generated: { texto: `Problema identificando al usuario: ${currentUserEmail}`, imagen: null } }; // Estructura consistente
+  }
   
             }
   
