@@ -145,7 +145,6 @@ export interface CampaniaMarketingData {
     objetivos?: Objetivos;
     fechas?: Fechas;
     audiencia_objetivo?: AudienciaObjetivo;
-    plataformas?: string[];
     semanas: SemanaCampania[]; // Array de semanas de planificación
     presupuesto?: Presupuesto;
     metricas?: Metricas;
