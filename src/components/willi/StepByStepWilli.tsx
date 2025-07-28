@@ -464,6 +464,8 @@ console.log(descuentoExitoso)
 
   // Efecto para verificar existencia de datos cuando cambia el paso
   
+    setEmail(session?.user?.email as string)
+    
   useEffect(() => {
      setIdProyecto(idProyectoD)
     
@@ -553,7 +555,6 @@ console.log(descuentoExitoso)
   
   
   const handleGenerateEstudio = async () => {
-    setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
 
