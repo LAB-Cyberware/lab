@@ -12,7 +12,7 @@ import StepByStepWilli from "@/components/willi/StepByStepWilli"; // Ajusta la r
 // Puedes usar un archivo de utilidades de servidor para esto
 async function fetchServerData<T>(endpoint: string, projectId: string): Promise<T | null> {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/${endpoint}?projectId=${projectId}`, {
+    const response = await fetch(`/api/${endpoint}?p=${projectId}`, {
       cache: 'no-store', // Para asegurar que siempre se obtenga la última versión
     });
 
