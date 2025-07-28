@@ -36,7 +36,6 @@ export interface AudienciaObjetivo {
 export interface Publicacion {
     hora: string; // e.g., '10:00 AM'
     formato: string; // e.g., 'IMAGEN', 'VIDEO_CORTO', 'CARRUSEL', 'TEXTO_IMAGEN'
-    plataforma: string[]; // e.g., ['INSTAGRAM', 'FACEBOOK', 'BLOG']
     tematica: string;
     contenido_detallado: string;
     objetivo: string;
