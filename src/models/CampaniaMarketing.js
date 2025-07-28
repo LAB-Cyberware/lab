@@ -134,7 +134,6 @@ const CampaniaMarketingSchema = new mongoose.Schema({
   objetivo: {
     type: String,
     required: true,
-    trim: true
   },
   target: {
     type: String,
@@ -144,7 +143,6 @@ const CampaniaMarketingSchema = new mongoose.Schema({
   tematica: {
     type: String,
     required: true,
-    trim: true
   },
   definicion_arte: {
     type: DefinicionArteSchema,
