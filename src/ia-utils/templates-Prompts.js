@@ -84,7 +84,7 @@ function promptCampaniaMarketing(makerData,estudioData,estrategiaData){
         ${promptEpicMode}
         
         INSTRUCCION ESPECIFICA:
-        Realiza una campania de marketing digital detallada super efectiva,con una duracion de 4 semanas, en los post, debes proponer solo post de texto y en las imagenes debes proponer solo imagenes y nunca proponer videos, eficaz y eficiente utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote en la descripcion de contexto de la INFORMACION DEL PROYECTO, ESTUDIO MERCADO y ESTRATEGIA MARKETING.
+        Realiza una campania de marketing digital detallada super efectiva,con una duracion de 2 semanas exactas ni mas ni menos, en los post, debes proponer solo post de texto y en las imagenes debes proponer solo imagenes y nunca proponer videos, eficaz y eficiente utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote en la descripcion de contexto de la INFORMACION DEL PROYECTO, ESTUDIO MERCADO y ESTRATEGIA MARKETING.
               
         ESQUEMA JSON:
         ${textCampaniaMarketing}
