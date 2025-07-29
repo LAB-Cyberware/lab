@@ -66,7 +66,7 @@ const PostSchema = new mongoose.Schema({
   },
   canal: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   estado: {

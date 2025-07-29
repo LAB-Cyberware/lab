@@ -33,6 +33,8 @@ export async function GET(request){
 
 
 export async function POST(request){
+    console.log("=============   POST.api.CampaniaMarketing request:    ==================")
+      console.log(request)
     connectDB();
     const data = await request.json();
     if(data){
