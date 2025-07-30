@@ -807,6 +807,15 @@ console.log(resultadoAccion)
                         </>
 
                       )}
+                        <button
+
+                        onClick={() =>
+
+                          handleUseTokens("generate-post", { week: weekIndex, day: dayIndex, post})
+
+                        }
+                        disabled>Programar Publicacion [pronto...]</button>
+                        
 
                     </div>
 
