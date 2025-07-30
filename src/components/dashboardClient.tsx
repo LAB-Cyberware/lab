@@ -1,21 +1,23 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 
-const UserDashboard = ({ userEmail }) => {
+
+
+
+// --- Componente principal del Flujo de Marketing ---
+interface UserDashboardProps {
+        userEmail:string|null;
+}
+  
+const UserDashboard: React.FC<UserDashboardProps> = ({userEmail}) => {
+
   // Estado para la información del usuario y el saldo de tokens
   
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // Simula la carga inicial de datos del usuario
-  useEffect(() => {
-    // En una aplicación real, aquí harías una llamada a tu API
-    // para obtener el saldo de tokens real del usuario.
-    // Por ahora, simulamos un saldo inicial.
-    setUserInfo(prevInfo => ({ ...prevInfo, tokenBalance: 10 })); // Ejemplo: usuario inicia con 10 tokens
-  }, []);
-
+  
   // Función para llamar a la API y cobrar los tokens
   const getTokensPack = async () => {
     setLoading(true);
@@ -31,7 +33,7 @@ const UserDashboard = ({ userEmail }) => {
           // 'Authorization': `Bearer ${userAuthToken}`,
         },
         body: JSON.stringify({
-          email: userInfo.email,
+          email: userEmail,
           tokens: 35 // El saldo final después de recibir el regalo
         }),
       });
@@ -43,10 +45,9 @@ const UserDashboard = ({ userEmail }) => {
       }
 
       const data = await response.json();
-      setUserInfo(prevInfo => ({ ...prevInfo, tokenBalance: data.updatedTokenBalance }));
       setMessage('¡TokenPack cobrado con éxito! Tu nuevo saldo es de ' + data.updatedTokenBalance + ' tokens.');
 
-    } catch (err) {
+    } catch (err:any) {
       console.error("Error al cobrar TokenPack:", err);
       setError('Error al cobrar el TokenPack: ' + err.message);
     } finally {
