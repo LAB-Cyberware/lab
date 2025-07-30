@@ -1,48 +1,85 @@
-'use client';
+import React, { useState, useEffect } from 'react';
 
-// Opcional: Importar el hook useSession para reactividad en el lado del cliente
-import { useSession, signOut } from 'next-auth/react';
+const UserDashboard = ({ userEmail }) => {
+  // Estado para la información del usuario y el saldo de tokens
+  const [userInfo, setUserInfo] = useState({
+    email: userEmail, // Usa el email pasado por props como valor inicial
+    tokenBalance: 0,
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-// El componente recibe la sesión inicial como prop desde el Server Component
-export default function DashboardClient({ session: initialSession }) {
-  
-  // -- MÉTODO 1: Usar las props (Recomendado para la carga inicial) --
-  // La sesión ya viene desde el servidor, por lo que no hay estado de carga.
-  // Es la forma más eficiente de mostrar los datos iniciales.
-  const userEmailFromProps = initialSession?.user?.email;
+  // Simula la carga inicial de datos del usuario
+  useEffect(() => {
+    // En una aplicación real, aquí harías una llamada a tu API
+    // para obtener el saldo de tokens real del usuario.
+    // Por ahora, simulamos un saldo inicial.
+    setUserInfo(prevInfo => ({ ...prevInfo, tokenBalance: 10 })); // Ejemplo: usuario inicia con 10 tokens
+  }, []);
 
-  // -- MÉTODO 2: Usar el hook `useSession` (Ideal para reactividad) --
-  // El hook se sincronizará con la sesión del cliente.
-  // Es útil si el estado de la sesión puede cambiar sin recargar la página (ej. logout).
-  const { data: session, status } = useSession();
+  // Función para llamar a la API y cobrar los tokens
+  const getTokensPack = async () => {
+    setLoading(true);
+    setMessage('');
+    setError('');
 
-  if (status === "loading") {
-    return <p>Cargando sesión...</p>
-  }
-  
+    try {
+      const response = await fetch('/api/user-tokens', { // Reemplaza con la URL real de tu API
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Podrías necesitar un token de autenticación aquí, ej:
+          // 'Authorization': `Bearer ${userAuthToken}`,
+        },
+        body: JSON.stringify({
+          email: userInfo.email,
+          tokens: 35 // El saldo final después de recibir el regalo
+        }),
+      });
+
+      if (!response.ok) {
+        // Si la respuesta no es 2xx, lanza un error
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al cobrar el TokenPack');
+      }
+
+      const data = await response.json();
+      setUserInfo(prevInfo => ({ ...prevInfo, tokenBalance: data.updatedTokenBalance }));
+      setMessage('¡TokenPack cobrado con éxito! Tu nuevo saldo es de ' + data.updatedTokenBalance + ' tokens.');
+
+    } catch (err) {
+      console.error("Error al cobrar TokenPack:", err);
+      setError('Error al cobrar el TokenPack: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div style={{ marginTop: '20px', border: '1px solid #ccc', padding: '15px' }}>
-      <h2>Información de Usuario (Client Component)</h2>
-      
-      <h4>Datos desde props (carga inicial):</h4>
-      {userEmailFromProps ? (
-        <p>Email: <strong>{userEmailFromProps}</strong></p>
-      ) : (
-        <p>No se encontró email en las props.</p>
-      )}
+    <div className="user-dashboard-container">
+      <div className="user-info-card">
+        <h2>Tu Información de Usuario</h2>
+        <p><strong>Email:</strong> {userInfo.email}</p>
+        <p><strong>Saldo de Tokens:</strong> {userInfo.tokenBalance} eWaves</p>
+      </div>
 
-      <hr style={{ margin: '15px 0' }} />
-
-      <h4>Datos desde hook <code>useSession</code> (reactivo):</h4>
-      {session ? (
-        <>
-          <p>Email: <strong>{session.user.email}</strong></p>
-          <p>Nombre: {session.user.name}</p>
-          <button onClick={() => signOut()}>Cerrar Sesión</button>
-        </>
-      ) : (
-        <p>No estás autenticado.</p>
-      )}
+      <div className="gift-message-box">
+        <p className="gift-message-text">
+          <span className="highlight">¡Felicidades!</span> Estás a punto de recibir un <span className="highlight">Regalo de Lanzamiento</span> que te permitirá generar un **eWavePack completo** para tu proyecto. ¡Súbete a la Ola eWave!
+        </p>
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
+        <button
+          className="claim-button"
+          onClick={getTokensPack}
+          disabled={loading}
+        >
+          {loading ? 'Cargando...' : 'Cobrar TokenPack'}
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default UserDashboard;

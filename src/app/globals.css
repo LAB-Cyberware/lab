@@ -831,3 +831,121 @@ color:var(--ewave-cyan); /* Replaced indigo-500 with eWave Cyan */
   text-shadow: 10px 10px 20px black;
 }
 .img-post-gen{max-width:100%;}
+
+.user-dashboard-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  text-align: center;
+  color: #333;
+}
+
+.user-info-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.user-info-card h2 {
+  color: #007bff; /* Un azul vibrante */
+  margin-bottom: 15px;
+  font-size: 1.8em;
+}
+
+.user-info-card p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.user-info-card strong {
+  color: #555;
+}
+
+.gift-message-box {
+  background: linear-gradient(135deg, #28a745, #218838); /* Verde vibrante */
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  margin-top: 30px;
+  position: relative;
+  overflow: hidden; /* Para contener los posibles elementos flotantes de diseño */
+}
+
+.gift-message-box::before {
+  content: '🎁'; /* Icono de regalo */
+  font-size: 4em;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  opacity: 0.2;
+  transform: rotate(20deg);
+  z-index: 0;
+}
+
+.gift-message-text {
+  font-size: 1.5em; /* Más grande para que sea notorio */
+  font-weight: bold;
+  line-height: 1.4;
+  margin-bottom: 25px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  z-index: 1; /* Asegura que el texto esté sobre el icono */
+  position: relative;
+}
+
+.highlight {
+  color: #ffc107; /* Amarillo para resaltar palabras clave */
+  font-weight: bolder;
+}
+
+.claim-button {
+  background-color: #ffc107; /* Amarillo vibrante */
+  color: #333;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px; /* Bordes redondeados para un aspecto moderno */
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  position: relative;
+}
+
+.claim-button:hover {
+  background-color: #e0a800; /* Un poco más oscuro al pasar el ratón */
+  transform: translateY(-2px); /* Pequeño efecto de elevación */
+}
+
+.claim-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.success-message {
+  color: #d4edda; /* Verde claro para mensajes de éxito */
+  background-color: rgba(40, 167, 69, 0.8);
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #f8d7da; /* Rojo claro para mensajes de error */
+  background-color: rgba(220, 53, 69, 0.8);
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 15px;
+  font-weight: bold;
+}
