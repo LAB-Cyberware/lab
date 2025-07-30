@@ -164,6 +164,9 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
           const GeneratePost = async ({ week, day, post }:any) => {
 
+    console.log(" =====  GENERATE POST ======= ")
+    console.log({ week, day, post })
+
               const getKey = (week:any, day:any) => `${week}_${day}`;
 
               const key = getKey(week, day);
