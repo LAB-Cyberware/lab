@@ -807,6 +807,9 @@ console.log(resultadoAccion)
                         </>
 
                       )}
+                         <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
+                         <p className="font-semibold mt-1"> podrás publicar directamente desde eWave.</p>
+
                         <button
 
                         onClick={() =>
