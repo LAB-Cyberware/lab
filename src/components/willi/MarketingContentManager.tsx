@@ -62,6 +62,10 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
           const generatePost = async (post:any) => {
 
+    
+    console.log(" =====  GENERATE POST post: ====== ")
+    console.log(post)
+
               try {
 
                   let bodyData = JSON.stringify({ item: 'post-final', post: post });
@@ -104,7 +108,7 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
                       const res = await response.json();
 
-                      const texto_final = res[0].texto;
+                      const texto_final = res.texto;
 
 
 
