@@ -86,7 +86,7 @@ export default function Webapp() {
             <h1 className="welcome-title">{textoProyecto}</h1>
             <p className="welcome-subtitle">{fraseProyecto}</p>
             <div className="welcome-form">
-                <a href="https://wa.me/56920905973?text=Quiero%20hablar%20del%20eWave%20Pack"><button className="welcome-button">¡Hablemos!</button></a>
+                <a href="/dashboard"><button className="welcome-button">¡Conseguir Tokens Gratis !!</button></a>
             </div>
         </div>
     </section>
@@ -121,7 +121,7 @@ export default function Webapp() {
     {/* Sección Catálogo de Productos/Servicios */}
     <section id="catalogo" className="catalog-section">
         <div className="catalog-container">
-            <h2 className="catalog-title">Nuestro Catálogo</h2>
+            <h2 className="catalog-title">Tecnología Epica para generar nuestras Waves</h2>
             <div className="catalog-grid">
                 {AppCatalogo && AppCatalogo.length > 0 ? (
                     AppCatalogo.map((item) => (

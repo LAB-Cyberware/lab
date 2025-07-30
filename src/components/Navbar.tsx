@@ -26,11 +26,16 @@ function Navbar() {
 
         {session?.user ? (
           <>
+          <Link href="/proyectos">
+            </Link>
             <Link href="/proyectos">
-              <button className="nav-button">Proyectos</button>
+              <button className="nav-button text-s">Proyectos</button>
+            </Link>
+            <Link href="/buytokens">
+              <button className="nav-button text-s bg-orange-500">Recarga Tokens</button>
             </Link>
             
-              <button onClick={()=> signOut()} className="rounded p-1 text-sm font-bold text-white bg-red-500">Salir</button>
+              <button onClick={()=> signOut()} className="rounded p-1 text-s font-bold text-white bg-gray-900">Salir</button>
           </>
         ) : (
           <div className="nav-links">

@@ -5,7 +5,10 @@ function FooterClient() {
     <footer id="contacto" className="contact-footer">
         <div className="contact-container">
             <h2 className="contact-title">¿Listo para Empezar?</h2>
-            <p className="contact-subtitle">Déjanos un mensaje y nos pondremos en contacto contigo.</p>
+            <a href="/dashboard"><button className="welcome-button">¡Conseguir Tokens Gratis !!</button></a>
+            
+            <p className="contact-subtitle">O déjanos un mensaje y nos pondremos en contacto contigo.</p>
+            
             <div className="contact-form">             
                 <a href="https://wa.me/56920905973?text=Quiero%20hablar%20del%20eWave%20Pack"><button className="contact-button">Hablemos!</button></a>
             </div>
