@@ -48,8 +48,8 @@ const UserDashboard: React.FC<UserDashboardProps> = ({userEmail}) => {
       setMessage('¡TokenPack cobrado con éxito! Tu nuevo saldo es de 35 tokens.');
 
     } catch (err:any) {
-      console.error("Error al cobrar TokenPack:", err);
-      setError('Error al cobrar el TokenPack: ' + err.message);
+      console.error("Error al cobrar TokenPack:", err); 
+      setError('Oops! tu Token Pack ya ya está Reclamado. No te preocupes, mantente alerta a las próximas ofertas y regalos que tenemos preparados para ti!');
     } finally {
       setLoading(false);
     }
