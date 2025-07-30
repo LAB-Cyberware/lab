@@ -714,9 +714,9 @@ console.log(descuentoExitoso)
 
         {isLoading && (
           <div className="flex items-center justify-center py-8">
-            <img className="flow-img" src={`/step${currentStep}.png`} /><br></br>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-2 text-gray-600">Procesando...</span>
+            <img className="flow-img" src={`/step${currentStep}.png`} /><br></br><br></br>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><br></br><br></br>
+            <span className="ml-2 text-gray-600"><br></br><br></br>Procesando...</span>
           </div>
         )}
 

@@ -830,3 +830,4 @@ color:var(--ewave-cyan); /* Replaced indigo-500 with eWave Cyan */
 .coins * {
   text-shadow: 10px 10px 20px black;
 }
+.img-post-gen{max-width:100%;}
