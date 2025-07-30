@@ -848,7 +848,8 @@ console.log(descuentoExitoso)
                 </div>
                 <CampaniaMarketingDisplay Input={dataCampaniaMarketing} />
                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mt-4">
-                  <p className="text-blue-700">¡Flujo de trabajo completado exitosamente!</p>
+                  <p className="text-blue-700">¡Flujo de trabajo completado exitosamente ahora puedes Continuar en el Gestor de Contenidos de Marketing!</p>
+                  <a href={`/contents-manager/${idProyecto}`}><button>Ir al Gestor de Contenidos</button></a>
                 </div>
               </div>
             )}
