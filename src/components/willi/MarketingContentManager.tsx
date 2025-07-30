@@ -483,7 +483,8 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
                           const resultadoAccion = await ejecutarAccion(action, objectAction);
 
-
+console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
+console.log(resultadoAccion)
 
                           // Verificar si la acción falló (ej. resultadoAccion.generated.texto contiene "Error:")
 
