@@ -1,11 +1,9 @@
 import {Schema, model, models} from 'mongoose';
 
-
 // --- Sub-esquemas para los tipos anidados ---
 
 // Esquema para ObjetivoGeneral
 const ObjetivoGeneralSchema = new Schema({
-  
   nombre: {
     type: String,
     required: [true, "El nombre del objetivo es requerido."],
@@ -21,13 +19,14 @@ const ObjetivoGeneralSchema = new Schema({
   metricas_clave: {
     type: [String], // Array de strings
     default: [],
-    // Puedes añadir validación para cada string si es necesario, ej.
-    // validate: {
-    //   validator: (v) => Array.isArray(v) && v.every(item => typeof item === 'string' && item.length > 0),
-    //   message: 'Las métricas clave deben ser un array de strings no vacíos.'
-    // }
+    // Validación para asegurar que el array de métricas clave no esté vacío si hay elementos
+    validate: {
+      validator: (v: string[]) => Array.isArray(v) && v.length > 0,
+      message: 'Las métricas clave deben ser un array de strings y no puede estar vacío.'
+    },
+    required: [true, "Las métricas clave son requeridas y no pueden estar vacías."]
   }
-}, { _id: false }); // _id: false si estos subdocumentos no necesitan un ID propio en la base de datos
+}); // Eliminado _id: false
 
 // Esquema para AnalisisMercadoTarget
 const AnalisisMercadoTargetSchema = new Schema({
@@ -43,7 +42,7 @@ const AnalisisMercadoTargetSchema = new Schema({
     trim: true,
     maxlength: [250, "La identificación del target no puede exceder los 250 caracteres."]
   }
-}, { _id: false });
+}); // Eliminado _id: false
 
 // Esquema para PilarEstrategico
 const PilarEstrategicoSchema = new Schema({
@@ -61,9 +60,15 @@ const PilarEstrategicoSchema = new Schema({
   },
   canales_principales: {
     type: [String], // Array de strings
-    default: []
+    default: [],
+    // Validación para asegurar que el array de canales principales no esté vacío
+    validate: {
+      validator: (v: string[]) => Array.isArray(v) && v.length > 0,
+      message: 'Los canales principales deben ser un array de strings y no puede estar vacío.'
+    },
+    required: [true, "Los canales principales son requeridos y no pueden estar vacíos."]
   }
-}, { _id: false });
+}); // Eliminado _id: false
 
 // Esquema para CanalYTacticaInicial
 const CanalYTacticaInicialSchema = new Schema({
@@ -75,9 +80,15 @@ const CanalYTacticaInicialSchema = new Schema({
   },
   tacticas: {
     type: [String], // Array de strings
-    default: []
+    default: [],
+    // Validación para asegurar que el array de tácticas no esté vacío
+    validate: {
+      validator: (v: string[]) => Array.isArray(v) && v.length > 0,
+      message: 'Las tácticas deben ser un array de strings y no puede estar vacío.'
+    },
+    required: [true, "Las tácticas son requeridas y no pueden estar vacías."]
   }
-}, { _id: false });
+}); // Eliminado _id: false
 
 // Esquema para PlanDeAccionFase1Item
 const PlanDeAccionFase1ItemSchema = new Schema({
@@ -99,7 +110,7 @@ const PlanDeAccionFase1ItemSchema = new Schema({
     trim: true,
     maxlength: [100, "El responsable no puede exceder los 100 caracteres."]
   }
-}, { _id: false });
+}); // Eliminado _id: false
 
 // --- Esquema Principal para EstrategiaMarketing ---
 
@@ -107,7 +118,7 @@ const EstrategiaMarketingSchema = new Schema({
   id_proyecto: {
     type: String,
     required: true,
-    description: "valor de _id en INFORMACION PROYECTO"
+    // Eliminado 'description' ya que no es una opción de Mongoose para propiedades
   },
   nombre_estrategia: {
     type: String,
@@ -118,8 +129,12 @@ const EstrategiaMarketingSchema = new Schema({
   },
   objetivos_generales: {
     type: [ObjetivoGeneralSchema], // Array de subdocumentos
-    default: [],
-    required: [true, "Los objetivos generales son requeridos."]
+    default: [], // Aunque haya un default, la validación de length abajo se aplicará
+    required: [true, "Los objetivos generales son requeridos y no pueden estar vacíos."],
+    validate: {
+      validator: (v: any[]) => Array.isArray(v) && v.length > 0,
+      message: 'Los objetivos generales deben ser un array y no puede estar vacío.'
+    }
   },
   analisis_mercado_target: {
     type: AnalisisMercadoTargetSchema, // Subdocumento único
@@ -128,25 +143,38 @@ const EstrategiaMarketingSchema = new Schema({
   pilares_estrategicos: {
     type: [PilarEstrategicoSchema], // Array de subdocumentos
     default: [],
-    required: [true, "Los pilares estratégicos son requeridos."]
+    required: [true, "Los pilares estratégicos son requeridos y no pueden estar vacíos."],
+    validate: {
+      validator: (v: any[]) => Array.isArray(v) && v.length > 0,
+      message: 'Los pilares estratégicos deben ser un array y no puede estar vacío.'
+    }
   },
   canales_y_tacticas_iniciales: {
     type: [CanalYTacticaInicialSchema], // Array de subdocumentos
     default: [],
-    required: [true, "Los canales y tácticas iniciales son requeridos."]
+    required: [true, "Los canales y tácticas iniciales son requeridos y no pueden estar vacíos."],
+    validate: {
+      validator: (v: any[]) => Array.isArray(v) && v.length > 0,
+      message: 'Los canales y tácticas iniciales deben ser un array y no puede estar vacío.'
+    }
   },
   plan_de_accion_fase_1: {
     type: [PlanDeAccionFase1ItemSchema], // Array de subdocumentos
     default: [],
-    required: [true, "El plan de acción de la fase 1 es requerido."]
+    required: [true, "El plan de acción de la fase 1 es requerido y no puede estar vacío."],
+    validate: {
+      validator: (v: any[]) => Array.isArray(v) && v.length > 0,
+      message: 'El plan de acción de la fase 1 debe ser un array y no puede estar vacío.'
+    }
   },
   consideraciones_adicionales: {
     type: [String], // Array de strings
     default: [],
     required: [true, "Las consideraciones adicionales son requeridas."]
+    // No se añade validación minItems: 1 aquí, ya que has indicado que "Puede estar vacío."
   }
 }, {
   timestamps: true // Añade campos `createdAt` y `updatedAt` automáticamente
 });
 
-export default models.EstrategiaMarketing || model('EstrategiaMarketing', EstrategiaMarketingSchema)
+export default models.EstrategiaMarketing || model('EstrategiaMarketing', EstrategiaMarketingSchema);
