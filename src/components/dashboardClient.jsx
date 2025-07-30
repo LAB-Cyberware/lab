@@ -3,10 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 const UserDashboard = ({ userEmail }) => {
   // Estado para la información del usuario y el saldo de tokens
-  const [userInfo, setUserInfo] = useState({
-    email: userEmail, // Usa el email pasado por props como valor inicial
-    tokenBalance: 0,
-  });
+  
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -60,9 +57,7 @@ const UserDashboard = ({ userEmail }) => {
   return (
     <div className="user-dashboard-container">
       <div className="user-info-card">
-        <h2>Tu Información de Usuario</h2>
-        <p><strong>Email:</strong> {userInfo.email}</p>
-        <p><strong>Saldo de Tokens:</strong> {userInfo.tokenBalance} eWaves</p>
+        <p><strong>Email:</strong> {userEmail}</p>
       </div>
 
       <div className="gift-message-box">

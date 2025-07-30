@@ -43,7 +43,7 @@ const DisplayTokens: React.FC = () => {
     }else{
         
       if (error) {
-        return <p>E</p>;
+        return <a href="/dashboard"><button className="rounded p-1 text-sm font-bold text-white bg-orange-500">conseguir TokensPack Gratis!</button></a>;
       }else{
             
           if (dataSaldo) {
