@@ -16,6 +16,7 @@ function Navbar() {
               <span className="text-xs font-bold text-blue-800 rounded p-1 bg-gray-200">
                 {session.user.email}
               </span>
+              <button onClick={()=> signOut()} className="rounded p-1 text-s font-bold text-white bg-gray-900">Salir</button>
             </div>
         ) : (
           <></>
@@ -35,7 +36,7 @@ function Navbar() {
               <button className="nav-button text-s bg-orange-500">Recarga Tokens</button>
             </Link>
             
-              <button onClick={()=> signOut()} className="rounded p-1 text-s font-bold text-white bg-gray-900">Salir</button>
+              
           </>
         ) : (
           <div className="nav-links">
