@@ -68,7 +68,7 @@ export async function POST(request) {
   const postTitle = post.titulo;
   const imageUrl = post.imagen; // URL públicamente accesible para la imagen
   const ctaText = post.cta || "Más Información"; // Not used in this basic feed post, but kept for consistency
-  const postUrl = "https://www.tuproyectoewave.com/"; // URL a la que el enlace de tu post apuntará
+  const postUrl = "https://ewave-cik7.onrender.com"; // URL a la que el enlace de tu post apuntará
   const topicCaption = post.tema || "Innovación Digital";
   const postDescription = post.fundamento || "Descubre cómo eWave puede transformar tu proyecto.";
 
@@ -86,7 +86,7 @@ export async function POST(request) {
         message: messageText,
         link: postUrl,
         name: postTitle,
-        caption: `www.tuproyectoewave.com - ${topicCaption}`,
+        caption: `eWave by EPIC MEDIA WAVE - ${topicCaption}`,
         description: postDescription,
         picture: imageUrl,
       }),

@@ -808,7 +808,7 @@ console.log(resultadoAccion)
 
                       )}
                          <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
-                         <FacebookPublisher/>
+                         <FacebookPublisher initialPostData={generatedContent}/>
 
                         <button
 

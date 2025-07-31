@@ -6,7 +6,20 @@ import React, { useState } from 'react';
  *
  * @param {object} initialPostData An example Post object to be published.
  */
-const FacebookPublisher = ({ initialPostData }) => {
+
+
+
+interface pfProps {
+
+  initialPostData: any | null;
+
+}
+
+
+
+
+const FacebookPublisher: React.FC<pfProps> = ({ initialPostData }) => {
+
   // Use a state for the post data, so it can be modified or pre-filled
   const [postToPublish, setPostToPublish] = useState(initialPostData || {
     objetivo: "Aumentar visibilidad de marca",
@@ -52,7 +65,7 @@ const FacebookPublisher = ({ initialPostData }) => {
       setPublishMessage(`¡Post publicado con éxito en Facebook! ID: ${data.facebookPostId}`);
       console.log('Facebook API response:', data);
 
-    } catch (error) {
+    } catch (error:any) {
       setPublishError(`Error al publicar en Facebook: ${error.message}`);
       console.error('Client-side error publishing to Facebook:', error);
     } finally {
