@@ -38,7 +38,11 @@ interface GeneratedContent {
 
 
 
-
+interface GeneratedContentP{
+      texto: string | null;
+    titulo: string | null;
+  imagen: string | null;
+}
 
 // REMOVED `async` from the component function
 
@@ -808,7 +812,7 @@ console.log(resultadoAccion)
 
                       )}
                          <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
-                         <FacebookPublisher initialPostData={generatedContent}/>
+                         <FacebookPublisher initialPostData={{texto:generatedContent.texto,imagen:generatedContent.imagen}}/>
 
                         <button
 

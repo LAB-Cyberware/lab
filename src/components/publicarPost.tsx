@@ -11,7 +11,10 @@ import React, { useState } from 'react';
 
 interface pfProps {
 
-  initialPostData: any | null;
+  initialPostData: {
+  texto:string|any;
+  imagen:string|any;
+}
 
 }
 
@@ -22,7 +25,6 @@ const FacebookPublisher: React.FC<pfProps> = ({ initialPostData }) => {
 
   // Use a state for the post data, so it can be modified or pre-filled
   const [postToPublish, setPostToPublish] = useState(initialPostData || {
-    objetivo: "Aumentar visibilidad de marca",
     definicion_arte: "Colores corporativos de eWave, estilo futurista.",
     titulo: "¡Lanzamiento Exclusivo eWave!",
     tema: "Innovación en AI para Proyectos",
