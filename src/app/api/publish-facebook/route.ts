@@ -5,11 +5,7 @@ import { NextResponse } from 'next/server';
 // 1. Tipo para el objeto Post que se recibe en el body de la solicitud
 interface Post {
   texto: string;
-  titulo: string;
   imagen: string;
-  cta?: string; // Propiedad opcional
-  tema?: string; // Propiedad opcional
-  fundamento?: string; // Propiedad opcional
 }
 
 // 2. Tipo para la estructura de error que puede devolver la API de Facebook
@@ -83,7 +79,7 @@ export async function POST(request: Request): Promise<NextResponse<SuccessRespon
   }
 
   // 4. Validaciones de datos de entrada del 'post'
-  if (!post || !post.texto || !post.titulo || !post.imagen) {
+  if (!post || !post.texto || !post.texto || !post.imagen) {
     return NextResponse.json(
       { message: 'Faltan datos de post requeridos (texto, titulo, o imagen).' },
       { status: 400 }
@@ -92,11 +88,10 @@ export async function POST(request: Request): Promise<NextResponse<SuccessRespon
 
   // 5. Tipado de variables para los parámetros de la API de Facebook
   const messageText: string = post.texto;
-  const postTitle: string = post.titulo;
+  const postTitle: string = post.texto;
   const imageUrl: string = post.imagen; // URL públicamente accesible para la imagen
   const postUrl: string = "https://ewave-cik7.onrender.com"; // URL a la que el enlace de tu post apuntará
-  const topicCaption: string = post.tema || "Innovación Digital";
-  const postDescription: string = post.fundamento || "Descubre cómo eWave puede transformar tu proyecto.";
+  const topicCaption: string = post.texto || "Innovación Digital";
 
   // 6. Definición de la URL de la API de Facebook
   const facebookApiUrl: string = `https://graph.facebook.com/v19.0/${FACEBOOK_PAGE_ID}/feed`; // Usa la última versión de la API
@@ -114,7 +109,7 @@ export async function POST(request: Request): Promise<NextResponse<SuccessRespon
         link: postUrl,
         name: postTitle,
         caption: `eWave by EPIC MEDIA WAVE - ${topicCaption}`,
-        description: postDescription,
+        description: messageText,
         picture: imageUrl,
       }),
     });

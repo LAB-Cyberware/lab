@@ -25,18 +25,14 @@ const FacebookPublisher: React.FC<pfProps> = ({ initialPostData }) => {
 
   // Use a state for the post data, so it can be modified or pre-filled
   const [postToPublish, setPostToPublish] = useState(initialPostData || {
+    
+
     definicion_arte: "Colores corporativos de eWave, estilo futurista.",
     titulo: "¡Lanzamiento Exclusivo eWave!",
     tema: "Innovación en AI para Proyectos",
     texto: "Prepárate para la nueva ola de innovación. Con eWave, tus proyectos alcanzarán niveles impensables. Descubre cómo la IA puede transformar tu visión en realidad.",
     cta: "Explora Ahora",
-    imagen: "https://ewave.com/assets/images/ewave_launch_graphic.jpg", // Ensure this is a public URL
-    hora: "14:00",
-    canal: "Facebook",
-    estado: "Draft",
-    fundamento: "Generar expectación y dirigir tráfico al sitio.",
-    recomendacion_creacion: "Imágenes de alta calidad, texto conciso y CTA claro.",
-    recomendacion_publicacion_seguimiento: "Monitorear alcance y engagement las primeras 24 horas."
+    imagen: "https://ewave.com/assets/images/ewave_launch_graphic.jpg", 
   });
 
   const [isPublishing, setIsPublishing] = useState(false);
