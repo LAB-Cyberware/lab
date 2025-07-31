@@ -21,7 +21,7 @@ const FacebookPublisher = ({ initialPostData }) => {
     estado: "Draft",
     fundamento: "Generar expectación y dirigir tráfico al sitio.",
     recomendacion_creacion: "Imágenes de alta calidad, texto conciso y CTA claro.",
-    recomendacion_publicacion_seguimiento: "Monitorear alcance y engagement las primeras 24h."
+    recomendacion_publicacion_seguimiento: "Monitorear alcance y engagement las primeras 24 horas."
   });
 
   const [isPublishing, setIsPublishing] = useState(false);
