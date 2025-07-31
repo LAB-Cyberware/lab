@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import { Spinner } from '@heroui/react';
 
-
+import FacebookPublisher from "@/components/publicarPost"
 
 import {
 
@@ -808,7 +808,7 @@ console.log(resultadoAccion)
 
                       )}
                          <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
-                         <p className="font-semibold mt-1"> podrás publicar directamente desde eWave.</p>
+                         <FacebookPublisher/>
 
                         <button
 
