@@ -1,3 +1,79 @@
+const schemaProyecto = {
+  type: "object",
+  properties: {
+    nombre: {
+      type: "string",
+      description: "El nombre identificativo del proyecto.",
+      minLength: 1 // Asumiendo que required implica al menos 1 caracter
+    },
+    descripcion: {
+      type: "string",
+      description: "Descripción detallada del proyecto.",
+      minLength: 1
+    },
+    mision: {
+      type: "string",
+      description: "Declaración de la misión del proyecto.",
+      minLength: 1
+    },
+    vision: {
+      type: "string",
+      description: "Declaración de la visión del proyecto.",
+      minLength: 1
+    },
+    logo: {
+      type: "string",
+      description: "URL o identificador del logo del proyecto.",
+      minLength: 1
+    },
+    texto: {
+      type: "string",
+      description: "Contenido de texto principal del proyecto.",
+      minLength: 1
+    },
+    frase: {
+      type: "string",
+      description: "Frase o eslogan del proyecto.",
+      minLength: 1
+    },
+    fondo: {
+      type: "string",
+      description: "URL o identificador del fondo de la eWaveApp del proyecto.",
+      minLength: 1
+    },
+    user: {
+      type: "string",
+      description: "Identificador del usuario propietario del proyecto.",
+      minLength: 1
+    },
+    fono: {
+      type: "string",
+      description: "Número de teléfono de contacto del proyecto.",
+      minLength: 1
+    },
+    mail: {
+      type: "string",
+      description: "Correo electrónico de contacto del proyecto.",
+      format: "email", // Agregamos un formato de email para mejor validación
+      minLength: 1
+    }
+  },
+  required: [
+    "nombre",
+    "descripcion",
+    "mision",
+    "vision",
+    "logo",
+    "texto",
+    "frase",
+    "fondo",
+    "user",
+    "fono",
+    "mail"
+  ],
+  additionalProperties: false // Opcional: prohíbe propiedades no definidas en el esquema
+};
+
 const schemaEstudioMercado = {
     id_proyecto: {
     type: "string",
@@ -477,4 +553,4 @@ const schemaCampaniaMarketing = {
     }
   
 
-export { schemaEstudioMercado, schemaEstrategiaMarketing, schemaCampaniaMarketing, schemaPostFinal, schemaPostFinalImg };
+export { schemaEstudioMercado, schemaEstrategiaMarketing, schemaCampaniaMarketing, schemaPostFinal, schemaPostFinalImg, schemaProyecto };

@@ -1,4 +1,4 @@
-import {schemaEstudioMercado, schemaEstrategiaMarketing, schemaCampaniaMarketing, schemaPostFinal,schemaPostFinalImg} from "@/ia-utils/schemas-Responses";
+import {schemaEstudioMercado, schemaEstrategiaMarketing, schemaCampaniaMarketing, schemaPostFinal,schemaPostFinalImg, schemaProyecto} from "@/ia-utils/schemas-Responses";
 import JsonToPrompt from "@/utils/JsonToPrompt";
 
 function promptEpicMode(){
@@ -47,6 +47,24 @@ function promptEstudioMercado(makerData){
         ${textMakerData}
       `)
 }
+function promptProyecto(data){
+    const txtProyecto = JsonToPrompt(schemaProyecto);
+    
+    return(`
+      INSTRUCCION GENERAL:
+      ${promptEpicMode}
+      
+      INSTRUCCION ESPECIFICA:
+      Aplica todos tus conocimientos y habilidades para generar una impactante, super efectiva, y altamente representativa del proyecto guiandote exclusivamente por la INFORMACION DEL PROYECTO y toda la informacion que consigas de tu investigacion para generar el resultado mas cientifico, profesional y efectivo.
+      
+      ESQUEMA JSON:
+      ${txtProyecto}
+
+      INFORMACION DEL PROYECTO:
+        ${data}
+      `)
+}
+
 
 function promptEstrategiaMarketing(makerData,estudioData){
     
@@ -173,6 +191,9 @@ export default function getPrompt(item,makerData,estudioData,estrategiaData,post
     }
     if(item=='post-final-img'){
         return(promptPostFinalImg(postData))
+    }
+    if(item=='proyecto'){
+        return(promptProyecto(proyectInfo))
     }
 }
     
