@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import { Spinner } from '@heroui/react';
 
-import FacebookPublisher from "@/components/publicarPost"
+import PublicPost from "@/components/publicarPost"
 
 import {
 
@@ -812,7 +812,11 @@ console.log(resultadoAccion)
 
                       )}
                          <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
-                         <FacebookPublisher initialPostData={{texto:generatedContent.texto,imagen:generatedContent.imagen}}/>
+                         <PublicPost 
+                         texto={generatedContent.texto}
+                         imagen={generatedContent.imagen}
+                         timestamp={dia.fecha}
+                         />
 
                         <button
 
