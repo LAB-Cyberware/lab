@@ -19,8 +19,8 @@ interface PublicPostProps {
 
 // Handler de Facebook simplificado
 class FacebookPostHandler {
-  private accessToken: string;
-  private pageId: string;
+  private accessToken?: string = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+  private pageId?: string = process.env.FACEBOOK_PAGE_ID;
   private baseUrl: string = 'https://graph.facebook.com/v18.0';
 
   constructor(accessToken: string, pageId: string) {
@@ -28,6 +28,7 @@ class FacebookPostHandler {
     this.pageId = pageId;
   }
 
+  
   async uploadImage(base64Image: string): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/photos`;
     
@@ -189,7 +190,13 @@ const PublicPost = ({
         setIsLoading(false);
         return;
       }
+/////////////////////////
+alert("info a publicar:")
+alert(imagen)
+alert(texto)
+alert(timestampToUse)
 
+////////////////////////
       const publishResult = await handler.publishPostWithImage(imagen, texto, timestampToUse || undefined);
       setResult(publishResult);
       setShowResult(true);
