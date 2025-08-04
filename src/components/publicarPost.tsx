@@ -126,12 +126,12 @@ const PublicPost = ({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [accessToken, setAccessToken] = useState('');
-  const [pageId, setPageId] = useState('');
-  const [showConfig, setShowConfig] = useState(false);
+  const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+  const pageId = process.env.FACEBOOK_PAGE_ID;
 
   // Descomponer timestamp inicial
   useEffect(() => {
+    
     if (timestamp) {
       try {
         const date = new Date(timestamp * 1000);
@@ -177,7 +177,6 @@ const PublicPost = ({
     
     if (!accessToken || !pageId) {
       alert('Por favor configura el Access Token y Page ID');
-      setShowConfig(true);
       return;
     }
 
@@ -240,41 +239,7 @@ let source =  `data:image/jpeg;base64,${imagen}`
 
       {/* Configuración */}
       <div className="mb-6">
-        <button
-          onClick={() => setShowConfig(!showConfig)}
-          className="text-sm text-blue-600 hover:text-blue-800 underline"
-        >
-          {showConfig ? 'Ocultar' : 'Mostrar'} configuración API
-        </button>
         
-        {showConfig && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-lg space-y-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Access Token
-              </label>
-              <input
-                type="password"
-                value={accessToken}
-                onChange={(e) => setAccessToken(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Tu Facebook Access Token"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Page ID
-              </label>
-              <input
-                type="text"
-                value={pageId}
-                onChange={(e) => setPageId(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="ID de tu página de Facebook"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Vista previa del contenido */}
