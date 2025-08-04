@@ -58,7 +58,7 @@ class FacebookPostHandler {
  
     const payload = {
       message: message,
-      source: source,
+      source: "https://ewave-cik7.onrender.com/logo.jpg",
       published: scheduledTime ? false : true,
       access_token: this.accessToken,
       ...(scheduledTime && { scheduled_publish_time: scheduledTime })
@@ -201,7 +201,7 @@ alert("info a publicar:")
 alert(imagen)
 alert(texto)
 alert(timestampToUse)
-let source =  `data:image/jpeg;base64,${imagen}`
+let source =  `"https://ewave-cik7.onrender.com/logo.jpg"`
 ////////////////////////
       const publishResult = await handler.publishPostWithImage(source, texto, timestampToUse || undefined);
       setResult(publishResult);
