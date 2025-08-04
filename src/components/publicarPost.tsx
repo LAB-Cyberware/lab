@@ -31,9 +31,9 @@ class FacebookPostHandler {
   
   async uploadImage(base64Image: string): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/photos`;
-    
+    //      source: `data:image/jpeg;base64,${base64Image}`,
     const payload = {
-      source: `data:image/jpeg;base64,${base64Image}`,
+      source: "https://ewave-cik7.onrender.com/logo.jpg",
       published: false,
       access_token: this.accessToken
     };
