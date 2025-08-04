@@ -130,8 +130,8 @@ const PublicPost = ({
   const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
   const pageId = process.env.FACEBOOK_PAGE_ID;
 */
-const accessToken = "2183672378811586|WMpCAb41bbPgGp7fLjxjemm8rys";
-  const pageId = "2183672378811586";
+const accessToken = "EAAYaxPxJIGEBPMwL4vH7P8EkZC5JraGXdP0h6y3YPRkVY3l6z1YjnN9GZB6CWZCZC1dnoZC1Ao5ZBYVOCDtZBOsoS8VtU0KQqoUgHEBSYte3dxgq5bgZBcsYoNrzuOKDfb0rZCtEHQzOXRsxAW1RUJn3a5vodoRZBA2RO0MZCMrFLEkQ21iNxlPfrP1h0LbYaLqzcb441zI3tkt";
+  const pageId = "756610597529439";
 
   // Descomponer timestamp inicial
   useEffect(() => {
