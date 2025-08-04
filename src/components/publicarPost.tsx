@@ -4,7 +4,7 @@ import { Calendar, Clock, Image, Send, CheckCircle, AlertCircle, Loader2 } from 
 // Interfaces
 interface PublishResult {
   success: boolean;
-  mediaFbid?: string;
+  source?: string;
   postId?: string;
   scheduledTime?: number;
   message: string;
@@ -53,12 +53,12 @@ class FacebookPostHandler {
     return result.id;
   }
 
-  async createScheduledPost(mediaFbid: string, message: string, scheduledTime?: number): Promise<string> {
+  async createScheduledPost(source: string, message: string, scheduledTime?: number): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/feed`;
     
     const payload = {
       message: message,
-      attached_media: [{ media_fbid: mediaFbid }],
+      source: source,
       published: scheduledTime ? false : true,
       access_token: this.accessToken,
       ...(scheduledTime && { scheduled_publish_time: scheduledTime })
@@ -79,14 +79,14 @@ class FacebookPostHandler {
     return result.id;
   }
 
-  async publishPostWithImage(base64Image: string, message: string, scheduledTime?: number): Promise<PublishResult> {
+  async publishPostWithImage(source: string, message: string, scheduledTime?: number): Promise<PublishResult> {
     try {
-      const mediaFbid = await this.uploadImage(base64Image);
-      const postId = await this.createScheduledPost(mediaFbid, message, scheduledTime);
+      //const mediaFbid = await this.uploadImage(base64Image);
+      const postId = await this.createScheduledPost(source, message, scheduledTime);
       
       return {
         success: true,
-        mediaFbid,
+        source,
         postId,
         scheduledTime,
         message: scheduledTime ? 'Post programado exitosamente' : 'Post publicado exitosamente'
@@ -195,9 +195,9 @@ alert("info a publicar:")
 alert(imagen)
 alert(texto)
 alert(timestampToUse)
-
+let source =  `data:image/jpeg;base64,${imagen}`
 ////////////////////////
-      const publishResult = await handler.publishPostWithImage(imagen, texto, timestampToUse || undefined);
+      const publishResult = await handler.publishPostWithImage(source, texto, timestampToUse || undefined);
       setResult(publishResult);
       setShowResult(true);
 
@@ -315,7 +315,7 @@ alert(timestampToUse)
 
       {/* Programación */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
           <Clock className="h-4 w-4" />
           Programar publicación (opcional)
         </label>
@@ -386,7 +386,7 @@ alert(timestampToUse)
               {result.success && (
                 <div className="mt-2 text-sm space-y-1">
                   {result.postId && <p>Post ID: {result.postId}</p>}
-                  {result.mediaFbid && <p>Media ID: {result.mediaFbid}</p>}
+                  {result.source && <p>Media ID: {result.source}</p>}
                   {result.scheduledTime && (
                     <p>Programado para: {formatDateTime(result.scheduledTime)}</p>
                   )}
