@@ -126,8 +126,12 @@ const PublicPost = ({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
+  /*
   const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
   const pageId = process.env.FACEBOOK_PAGE_ID;
+*/
+const accessToken = "2183672378811586|WMpCAb41bbPgGp7fLjxjemm8rys";
+  const pageId = "2183672378811586";
 
   // Descomponer timestamp inicial
   useEffect(() => {
