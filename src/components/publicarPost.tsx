@@ -55,7 +55,7 @@ class FacebookPostHandler {
 
   async createScheduledPost(source: string, message: string, scheduledTime?: number): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/feed`;
-    
+ 
     const payload = {
       message: message,
       source: source,
@@ -63,12 +63,15 @@ class FacebookPostHandler {
       access_token: this.accessToken,
       ...(scheduledTime && { scheduled_publish_time: scheduledTime })
     };
-
+    console.log("############ PAYLOAD TO FACEBOOK ####")
+    console.log(payload)
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+
+    
 
     if (!response.ok) {
       const error = await response.json();
