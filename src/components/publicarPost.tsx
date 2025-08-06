@@ -4,7 +4,7 @@ import { Calendar, Clock, Image, Send, CheckCircle, AlertCircle, Loader2 } from 
 // Interfaces
 interface PublishResult {
   success: boolean;
-  source?: string;
+  mediaFbid?: string;
   postId?: string;
   scheduledTime?: number;
   message: string;
@@ -12,15 +12,15 @@ interface PublishResult {
 }
 
 interface PublicPostProps {
-  texto: any;
-  imagen: any; // base64 image
-  timestamp: any; // Unix timestamp
+  texto?: string;
+  imagen?: string; // base64 image
+  timestamp?: number; // Unix timestamp
 }
 
 // Handler de Facebook simplificado
 class FacebookPostHandler {
-  private accessToken?: string = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-  private pageId?: string = process.env.FACEBOOK_PAGE_ID;
+  private accessToken: string;
+  private pageId: string;
   private baseUrl: string = 'https://graph.facebook.com/v18.0';
 
   constructor(accessToken: string, pageId: string) {
@@ -28,12 +28,11 @@ class FacebookPostHandler {
     this.pageId = pageId;
   }
 
-  
   async uploadImage(base64Image: string): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/photos`;
-    //      source: `data:image/jpeg;base64,${base64Image}`,
+    
     const payload = {
-      source: "https://ewave-cik7.onrender.com/logo.jpg",
+      source: `data:image/jpeg;base64,${base64Image}`,
       published: false,
       access_token: this.accessToken
     };
@@ -53,25 +52,22 @@ class FacebookPostHandler {
     return result.id;
   }
 
-  async createScheduledPost(source: string, message: string, scheduledTime?: number): Promise<string> {
+  async createScheduledPost(mediaFbid: string, message: string, scheduledTime?: number): Promise<string> {
     const url = `${this.baseUrl}/${this.pageId}/feed`;
- 
+    
     const payload = {
       message: message,
-      source: "https://ewave-cik7.onrender.com/logo.jpg",
+      attached_media: [{ media_fbid: mediaFbid }],
       published: scheduledTime ? false : true,
       access_token: this.accessToken,
       ...(scheduledTime && { scheduled_publish_time: scheduledTime })
     };
-    console.log("############ PAYLOAD TO FACEBOOK ####")
-    console.log(payload)
+
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
-    
 
     if (!response.ok) {
       const error = await response.json();
@@ -82,14 +78,14 @@ class FacebookPostHandler {
     return result.id;
   }
 
-  async publishPostWithImage(source: string, message: string, scheduledTime?: number): Promise<PublishResult> {
+  async publishPostWithImage(base64Image: string, message: string, scheduledTime?: number): Promise<PublishResult> {
     try {
-      //const mediaFbid = await this.uploadImage(base64Image);
-      const postId = await this.createScheduledPost(source, message, scheduledTime);
+      const mediaFbid = await this.uploadImage(base64Image);
+      const postId = await this.createScheduledPost(mediaFbid, message, scheduledTime);
       
       return {
         success: true,
-        source,
+        mediaFbid,
         postId,
         scheduledTime,
         message: scheduledTime ? 'Post programado exitosamente' : 'Post publicado exitosamente'
@@ -117,8 +113,8 @@ class FacebookPostHandler {
 
 // Componente principal
 const PublicPost = ({ 
-  texto, 
-  imagen, 
+  texto = "Texto de ejemplo para la publicación 🚀", 
+  imagen = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI/hcuH+wAAAABJRU5ErkJggg==", 
   timestamp 
 }: PublicPostProps) => {
   const [scheduledDate, setScheduledDate] = useState('');
@@ -126,16 +122,12 @@ const PublicPost = ({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
-  /*
-  const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-  const pageId = process.env.FACEBOOK_PAGE_ID;
-*/
-const accessToken = "EAAYaxPxJIGEBPMwL4vH7P8EkZC5JraGXdP0h6y3YPRkVY3l6z1YjnN9GZB6CWZCZC1dnoZC1Ao5ZBYVOCDtZBOsoS8VtU0KQqoUgHEBSYte3dxgq5bgZBcsYoNrzuOKDfb0rZCtEHQzOXRsxAW1RUJn3a5vodoRZBA2RO0MZCMrFLEkQ21iNxlPfrP1h0LbYaLqzcb441zI3tkt";
-  const pageId = "756610597529439";
+  const [accessToken, setAccessToken] = useState('');
+  const [pageId, setPageId] = useState('');
+  const [showConfig, setShowConfig] = useState(false);
 
   // Descomponer timestamp inicial
   useEffect(() => {
-    
     if (timestamp) {
       try {
         const date = new Date(timestamp * 1000);
@@ -181,6 +173,7 @@ const accessToken = "EAAYaxPxJIGEBPMwL4vH7P8EkZC5JraGXdP0h6y3YPRkVY3l6z1YjnN9GZB
     
     if (!accessToken || !pageId) {
       alert('Por favor configura el Access Token y Page ID');
+      setShowConfig(true);
       return;
     }
 
@@ -196,14 +189,8 @@ const accessToken = "EAAYaxPxJIGEBPMwL4vH7P8EkZC5JraGXdP0h6y3YPRkVY3l6z1YjnN9GZB
         setIsLoading(false);
         return;
       }
-/////////////////////////
-alert("info a publicar:")
-alert(imagen)
-alert(texto)
-alert(timestampToUse)
-let source =  `"https://ewave-cik7.onrender.com/logo.jpg"`
-////////////////////////
-      const publishResult = await handler.publishPostWithImage(source, texto, timestampToUse || undefined);
+
+      const publishResult = await handler.publishPostWithImage(imagen, texto, timestampToUse || undefined);
       setResult(publishResult);
       setShowResult(true);
 
@@ -243,7 +230,41 @@ let source =  `"https://ewave-cik7.onrender.com/logo.jpg"`
 
       {/* Configuración */}
       <div className="mb-6">
+        <button
+          onClick={() => setShowConfig(!showConfig)}
+          className="text-sm text-blue-600 hover:text-blue-800 underline"
+        >
+          {showConfig ? 'Ocultar' : 'Mostrar'} configuración API
+        </button>
         
+        {showConfig && (
+          <div className="mt-3 p-4 bg-gray-50 rounded-lg space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Access Token
+              </label>
+              <input
+                type="password"
+                value={accessToken}
+                onChange={(e) => setAccessToken(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Tu Facebook Access Token"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Page ID
+              </label>
+              <input
+                type="text"
+                value={pageId}
+                onChange={(e) => setPageId(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="ID de tu página de Facebook"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Vista previa del contenido */}
@@ -287,7 +308,7 @@ let source =  `"https://ewave-cik7.onrender.com/logo.jpg"`
 
       {/* Programación */}
       <div className="mb-6">
-        <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
           <Clock className="h-4 w-4" />
           Programar publicación (opcional)
         </label>
@@ -358,7 +379,7 @@ let source =  `"https://ewave-cik7.onrender.com/logo.jpg"`
               {result.success && (
                 <div className="mt-2 text-sm space-y-1">
                   {result.postId && <p>Post ID: {result.postId}</p>}
-                  {result.source && <p>Media ID: {result.source}</p>}
+                  {result.mediaFbid && <p>Media ID: {result.mediaFbid}</p>}
                   {result.scheduledTime && (
                     <p>Programado para: {formatDateTime(result.scheduledTime)}</p>
                   )}
