@@ -782,20 +782,7 @@ console.log(resultadoAccion)
 
                         <>
 
-                          <p className="font-semibold">Texto:</p>
-
-                          <textarea
-
-                            className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-800 text-sm resize-none"
-
-                            rows={5}
-
-                            readOnly
-
-                            value={generatedContent.texto}
-
-                          />
-
+                        
                         </>
 
                       )}
@@ -804,17 +791,15 @@ console.log(resultadoAccion)
 
                         <>
 
-                          <p className="font-semibold mt-2">Imagen Generada:</p>
-
-                          <img src={`data:image/jpeg;base64,${generatedContent.imagen}`} alt="Imagen generada" className="img-post-gen rounded-md shadow-md mt-1"/>
+                        
 
                         </>
 
                       )}
                          <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
                          <PublicPost 
-                         texto={generatedContent.texto}
-                         imagen={generatedContent.imagen}
+                         texto={generatedContent.texto as string}
+                         imagen={generatedContent.imagen as string}
                          timestamp={dia.fecha}
                          />
 

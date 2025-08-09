@@ -14,27 +14,41 @@ interface PublishResult {
 interface PublicPostProps {
   texto?: string;
   imagen?: string; // base64 image
-  timestamp?: number; // Unix timestamp
+  timestamp?: any; // Unix timestamp
 }
 
+const FACEBOOK_PAGE_ACCESS_TOKEN="EAAYaxPxJIGEBPB2ywS1aHrh1hVdFjYtzDN0uidD70nNZASN7VSME2fJ0FvtWQGmkG7oWj3ZA5OfWckZB86EY4mMlot5ZCdwvfpf59k2KiBMGUsVfRLmOKikZAnBRUT5zog3TEobWXIandkZCz5MLSWwEsPkdegwZCNlUjNAXA96nnaaYHo4bV5vrvvzHSG578kVcB6Q7kBZC"
+const FACEBOOK_PAGE_ID="756610597529439"
 // Handler de Facebook simplificado
 class FacebookPostHandler {
-  private accessToken: string;
-  private pageId: string;
+  private accessToken: string = "EAAYaxPxJIGEBPB2ywS1aHrh1hVdFjYtzDN0uidD70nNZASN7VSME2fJ0FvtWQGmkG7oWj3ZA5OfWckZB86EY4mMlot5ZCdwvfpf59k2KiBMGUsVfRLmOKikZAnBRUT5zog3TEobWXIandkZCz5MLSWwEsPkdegwZCNlUjNAXA96nnaaYHo4bV5vrvvzHSG578kVcB6Q7kBZC";
+  private pageId: string = "756610597529439";
   private baseUrl: string = 'https://graph.facebook.com/v18.0';
 
   constructor(accessToken: string, pageId: string) {
     this.accessToken = accessToken;
     this.pageId = pageId;
   }
+/*
+  async uploadImageCloudinary(base64Image:string): Promise<string>{
 
-  async uploadImage(base64Image: string): Promise<string> {
-    const url = `${this.baseUrl}/${this.pageId}/photos`;
+  cloudinary.v2.uploader
+.upload("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==")
+.then(result =>{
+  console.log(result)
+  return result as string
+  }
+);
+  
     
+  }
+*/
+
+async uploadImageCloudinary(base64Image: string): Promise<string> {
+    const url = `/api/cloudinary`;
     const payload = {
-      source: `data:image/jpeg;base64,${base64Image}`,
-      published: false,
-      access_token: this.accessToken
+      "imageBase64": `data:image/jpeg;base64,${base64Image}`,
+      "folder": "ewave-post-uploads"
     };
 
     const response = await fetch(url, {
@@ -42,26 +56,59 @@ class FacebookPostHandler {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
+    
     if (!response.ok) {
       const error = await response.json();
       throw new Error(`Error subiendo imagen: ${error.error?.message || response.statusText}`);
     }
 
     const result = await response.json();
-    return result.id;
+    return result.url;
+  }
+
+  async uploadImage(base64Image: string): Promise<string> {
+
+    const cloudinaryImage = await this.uploadImageCloudinary(base64Image)
+    const url = `/api/facebook/upload`;
+    
+    const payload = {
+      imageUrl: cloudinaryImage
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+console.log("### uploadImage payload: ###");
+console.log(payload);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`Error subiendo imagen: ${error.error?.message || response.statusText}`);
+    }
+
+    const result = await response.json();
+    return result.photoId;
   }
 
   async createScheduledPost(mediaFbid: string, message: string, scheduledTime?: number): Promise<string> {
-    const url = `${this.baseUrl}/${this.pageId}/feed`;
-    
+
+    //const url = `${this.baseUrl}/${this.pageId}/feed`;
+    const url = `/api/facebook/post`;
+
+    const fecha = new Date(scheduledTime as number);
+    const isoString = fecha.toISOString();
+    //scheduledTime
+    const scheduledTimeN = scheduledTime as number;
+    const finalTime = scheduledTimeN;
     const payload = {
       message: message,
-      attached_media: [{ media_fbid: mediaFbid }],
-      published: scheduledTime ? false : true,
-      access_token: this.accessToken,
-      ...(scheduledTime && { scheduled_publish_time: scheduledTime })
+      mediaFbid: mediaFbid,
+      scheduledTime: finalTime,
     };
+
+    console.log("### createSchedulePost payload: ###");
+    console.log(payload);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -79,9 +126,17 @@ class FacebookPostHandler {
   }
 
   async publishPostWithImage(base64Image: string, message: string, scheduledTime?: number): Promise<PublishResult> {
+    
+   
     try {
       const mediaFbid = await this.uploadImage(base64Image);
       const postId = await this.createScheduledPost(mediaFbid, message, scheduledTime);
+
+
+       console.log("### publishPostWithImage mediaFbid: ###");
+       console.log(mediaFbid);
+       console.log("### publishPostWithImage postId: ###");
+       console.log(postId);
       
       return {
         success: true,
@@ -122,9 +177,8 @@ const PublicPost = ({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [accessToken, setAccessToken] = useState('');
-  const [pageId, setPageId] = useState('');
-  const [showConfig, setShowConfig] = useState(false);
+  const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN as string;
+  const pageId = process.env.FACEBOOK_PAGE_ID as string;
 
   // Descomponer timestamp inicial
   useEffect(() => {
@@ -142,11 +196,19 @@ const PublicPost = ({
   }, [timestamp]);
 
   const getScheduledTimestamp = (): number | null => {
+    console.log("### getScheduledTimestamp scheduledDate: ### ")
+    console.log(scheduledDate)
+    console.log("### getScheduledTimestamp scheduledTime: ### ")
+    console.log(scheduledTime)
+    
     if (!scheduledDate || !scheduledTime) return null;
     
     try {
       const dateTime = new Date(`${scheduledDate}T${scheduledTime}`);
       const timestamp = FacebookPostHandler.dateToUnixTimestamp(dateTime);
+
+      console.log("### getScheduledTimestamp timestamp: ### ")
+      console.log(timestamp)
       
       if (!FacebookPostHandler.isValidScheduleTime(timestamp)) {
         alert('La fecha debe estar entre 10 minutos y 6 meses en el futuro');
@@ -170,13 +232,7 @@ const PublicPost = ({
       alert('No se proporcionó imagen');
       return;
     }
-    
-    if (!accessToken || !pageId) {
-      alert('Por favor configura el Access Token y Page ID');
-      setShowConfig(true);
-      return;
-    }
-
+   
     setIsLoading(true);
     setResult(null);
     setShowResult(false);
@@ -228,44 +284,7 @@ const PublicPost = ({
         Programar Publicación en Facebook
       </h2>
 
-      {/* Configuración */}
-      <div className="mb-6">
-        <button
-          onClick={() => setShowConfig(!showConfig)}
-          className="text-sm text-blue-600 hover:text-blue-800 underline"
-        >
-          {showConfig ? 'Ocultar' : 'Mostrar'} configuración API
-        </button>
-        
-        {showConfig && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-lg space-y-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Access Token
-              </label>
-              <input
-                type="password"
-                value={accessToken}
-                onChange={(e) => setAccessToken(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Tu Facebook Access Token"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Page ID
-              </label>
-              <input
-                type="text"
-                value={pageId}
-                onChange={(e) => setPageId(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="ID de tu página de Facebook"
-              />
-            </div>
-          </div>
-        )}
-      </div>
+      
 
       {/* Vista previa del contenido */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
