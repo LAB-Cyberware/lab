@@ -69,8 +69,8 @@ async uploadImageCloudinary(base64Image: string): Promise<string> {
   async uploadImage(base64Image: string): Promise<string> {
 
     const cloudinaryImage = await this.uploadImageCloudinary(base64Image)
-    const url = `/api/facebook/upload`;
-    
+  /*  const url = `/api/facebook/upload`;
+
     const payload = {
       imageUrl: cloudinaryImage
     };
@@ -89,6 +89,8 @@ console.log(payload);
 
     const result = await response.json();
     return result.photoId;
+    */
+   return cloudinaryImage;
   }
 
   async createScheduledPost(mediaFbid: string, message: string, scheduledTime?: number): Promise<string> {

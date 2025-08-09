@@ -69,8 +69,9 @@ export async function POST(request) {
     //attached_media: [{ media_fbid: mediaFbid }],
     const payload = {
       message: message,
-      media_fbid:mediaFbid,
+      source:mediaFbid,
       published: false,
+      scheduled_publish_time: scheduledTime,
       access_token: pageAccessToken
     };
 
@@ -80,7 +81,7 @@ export async function POST(request) {
       
       //const scheduledDate = new Date(scheduledTime);
       //payload.scheduled_publish_time = Math.floor(scheduledDate.getTime() / 1000);
-      payload.scheduled_publish_time = scheduledTime;
+      
   //  }
 
     // Hacer la petición a Facebook Graph API
