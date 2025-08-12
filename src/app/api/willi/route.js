@@ -118,6 +118,10 @@ export async function POST(req) {
     }else{
       const result = await model.generateContent(finalPrompt); 
       let williTxt = result.response.text()
+      
+      console.log("++++++++ WILLI Generate content say : williTxt +++++++++")
+      console.log(williTxt)
+
       let willJSON = jsonPure(williTxt)
       let williArray = new Array();
       williArray.push(JSON.parse(willJSON))

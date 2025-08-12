@@ -4,7 +4,7 @@ import { Calendar, Clock, Image, Send, CheckCircle, AlertCircle, Loader2 } from 
 // Interfaces
 interface PublishResult {
   success: boolean;
-  mediaFbid?: string;
+  urlImage?: string;
   postId?: string;
   scheduledTime?: number;
   message: string;
@@ -66,13 +66,14 @@ async uploadImageCloudinary(base64Image: string): Promise<string> {
     return result.url;
   }
 
-  async uploadImage(base64Image: string): Promise<string> {
+  async uploadImage(base64Image: string, message:string): Promise<string> {
 
     const cloudinaryImage = await this.uploadImageCloudinary(base64Image)
-  /*  const url = `/api/facebook/upload`;
+    const url = `/api/facebook/upload`;
 
     const payload = {
-      imageUrl: cloudinaryImage
+      imageUrl: cloudinaryImage,
+      message: message
     };
 
     const response = await fetch(url, {
@@ -89,11 +90,11 @@ console.log(payload);
 
     const result = await response.json();
     return result.photoId;
-    */
-   return cloudinaryImage;
+  
+   //return cloudinaryImage;
   }
 
-  async createScheduledPost(mediaFbid: string, message: string, scheduledTime?: number): Promise<string> {
+  async createScheduledPost(urlImage: string, message: string, scheduledTime?: number): Promise<string> {
 
     //const url = `${this.baseUrl}/${this.pageId}/feed`;
     const url = `/api/facebook/post`;
@@ -105,7 +106,7 @@ console.log(payload);
     const finalTime = scheduledTimeN;
     const payload = {
       message: message,
-      mediaFbid: mediaFbid,
+      urlImage: urlImage,
       scheduledTime: finalTime,
     };
 
@@ -127,22 +128,30 @@ console.log(payload);
     return result.id;
   }
 
+  
+// #####################################################    //
+// ######## CARGA COMPLETA A FACEBOOK        ###########    //
+// #####################################################    //
   async publishPostWithImage(base64Image: string, message: string, scheduledTime?: number): Promise<PublishResult> {
     
    
     try {
-      const mediaFbid = await this.uploadImage(base64Image);
-      const postId = await this.createScheduledPost(mediaFbid, message, scheduledTime);
+      
+      // ######     Subir a cloudinary,       ##################    //
+      // ######     eliminar de cloudinary,       ##################    //
+      const urlImage = await this.uploadImage(base64Image, message);
+      // ######     Subir a Facebook como post con el mensage y programado,       ##################    //
+      const postId = await this.createScheduledPost(urlImage, message, scheduledTime);
 
 
-       console.log("### publishPostWithImage mediaFbid: ###");
-       console.log(mediaFbid);
+       console.log("### publishPostWithImage urlImage: ###");
+       console.log(urlImage);
        console.log("### publishPostWithImage postId: ###");
        console.log(postId);
       
       return {
         success: true,
-        mediaFbid,
+        urlImage,
         postId,
         scheduledTime,
         message: scheduledTime ? 'Post programado exitosamente' : 'Post publicado exitosamente'
@@ -176,6 +185,7 @@ const PublicPost = ({
 }: PublicPostProps) => {
   const [scheduledDate, setScheduledDate] = useState('');
   const [scheduledTime, setScheduledTime] = useState('');
+  const timestampOriginal = timestamp;
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -206,7 +216,8 @@ const PublicPost = ({
     if (!scheduledDate || !scheduledTime) return null;
     
     try {
-      const dateTime = new Date(`${scheduledDate}T${scheduledTime}`);
+      //const dateTime = new Date(`${scheduledDate}T${scheduledTime}`);
+      const dateTime = timestampOriginal;
       const timestamp = FacebookPostHandler.dateToUnixTimestamp(dateTime);
 
       console.log("### getScheduledTimestamp timestamp: ### ")
@@ -225,6 +236,11 @@ const PublicPost = ({
   };
 
   const handlePublish = async () => {
+// #####################################################    //
+// #############  BLOQUE PRINCIPAL      ################    //
+// #####################################################    //
+
+
     if (!texto?.trim()) {
       alert('El texto del post está vacío');
       return;
@@ -239,15 +255,27 @@ const PublicPost = ({
     setResult(null);
     setShowResult(false);
 
+
+
     try {
       const handler = new FacebookPostHandler(accessToken, pageId);
+  
+// ###########  ESTABLECER FECHA HORA   ############################    //
+
+alert(`scheduledDate ${scheduledDate}`) // 2025-01-01
+alert(`scheduledTime ${scheduledTime}`) // 12:21
+alert(`timestampOriginal ${timestampOriginal}`) //  2025-08-16T00:00:00.000Z
+
+
+
       const timestampToUse = getScheduledTimestamp();
       
       if (scheduledDate && scheduledTime && timestampToUse === null) {
         setIsLoading(false);
         return;
       }
-
+      
+    // #########   PUBLICAR EN FACEBOOK   ###########################    //
       const publishResult = await handler.publishPostWithImage(imagen, texto, timestampToUse || undefined);
       setResult(publishResult);
       setShowResult(true);
@@ -264,6 +292,9 @@ const PublicPost = ({
     }
   };
 
+// #####################################################    //
+// ########   FIN BLOQUE PRINCIPAL    ##################    //
+// #####################################################    //
   const formatDateTime = (timestamp?: number) => {
     if (!timestamp) return '';
     try {
@@ -285,6 +316,7 @@ const PublicPost = ({
         <Send className="text-blue-600" />
         Programar Publicación en Facebook
       </h2>
+      <h3>FECHA: {timestampOriginal}</h3>
 
       
 
@@ -327,38 +359,7 @@ const PublicPost = ({
         </div>
       </div>
 
-      {/* Programación */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-          <Clock className="h-4 w-4" />
-          Programar publicación (opcional)
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <input
-              type="date"
-              value={scheduledDate}
-              onChange={(e) => setScheduledDate(e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <input
-              type="time"
-              value={scheduledTime}
-              onChange={(e) => setScheduledTime(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </div>
-        {scheduledDate && scheduledTime && (
-          <p className="text-sm text-gray-600 mt-2">
-            Se publicará el {formatDateTime(getScheduledTimestamp() || undefined)}
-          </p>
-        )}
-      </div>
-
+     
       {/* Botón principal */}
       <button
         onClick={handlePublish}
@@ -400,7 +401,7 @@ const PublicPost = ({
               {result.success && (
                 <div className="mt-2 text-sm space-y-1">
                   {result.postId && <p>Post ID: {result.postId}</p>}
-                  {result.mediaFbid && <p>Media ID: {result.mediaFbid}</p>}
+                  {result.urlImage && <p>Media ID: {result.urlImage}</p>}
                   {result.scheduledTime && (
                     <p>Programado para: {formatDateTime(result.scheduledTime)}</p>
                   )}

@@ -777,26 +777,6 @@ console.log(resultadoAccion)
                     <div className={commonClasses.generatedContentContainer}>
 
                       <h5 className="text-base font-semibold text-green-800 mb-2">Contenido Generado</h5>
-
-                      {generatedContent.texto && (
-
-                        <>
-
-                        
-                        </>
-
-                      )}
-
-                      {generatedContent.imagen && (
-
-                        <>
-
-                        
-
-                        </>
-
-                      )}
-                         <p className="font-bold mt-2">Copia y pega el texto e imagen generados directo en tu publicación!.</p>
                          <PublicPost 
                          texto={generatedContent.texto as string}
                          imagen={generatedContent.imagen as string}
