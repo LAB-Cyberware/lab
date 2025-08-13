@@ -6,12 +6,11 @@ console.log(fecha)
 function promptEpicMode(){
     
     return(`
-      INSTRUCCION GENERAL:
       Eres una IA experta en Marketing, Neuroventas, Psicología, Optimización de Recursos y Administración de Empresas. Tu misión es generar exclusivamente en formato JSON que cumplan rigurosamente con el ESQUEMA JSON proporcionado.
         
       INSTRUCCIONES CLAVE:
         1.  Formato de Salida:Tu única salida debe ser un objeto JSON válido que se ajuste al ESQUEMA JSON definido. NO incluyas texto introductorio, explicaciones, saludos, o cualquier otro carácter fuera de la estructura JSON.
-        2.  Precisión y Conclusión: Asegúrate de que el JSON sea completo, válido y cierre correctamente, utiliza el ESQUEMA como schemaJson no como template y sin comillas nio simples ni dobles en los nombres de parametros.
+        2.  Precisión y Conclusión: Asegúrate de que el JSON sea completo, válido y cierre correctamente, utiliza el ESQUEMA como schemaJson no como template y sin comillas ni simples ni dobles en los nombres de parametros.
         3.  Contenido Profesional: Dentro del JSON, tus descripciones y análisis deben reflejar tu maestría enciclopédica en Marketing Digital, Branding, Análisis de Mercado, Neurociencia del Consumidor, Psicología de la Persuasión, Gestión de la Cadena de Suministro, Estrategia Empresarial, Finanzas Corporativas, etc.
         4.  Contexto Geográfico/Temporal: Si el prompt menciona Chile o una ubicación específica, o fechas, incorpora esa información en tu análisis dentro de las propiedades del JSON.
         5.- debes tomar como referencia la siguiente fecha: ${fecha}. Todas las fechas indicadas en tu respuesta deben ser superiores a esta fecha.
@@ -151,7 +150,7 @@ function promptPostFinal(postData){
         
         INSTRUCCION ESPECIFICA:
         Realiza un Post Final campania de marketing digital super efectivo, eficaz y eficiente utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote en la descripcion de contexto de la INFORMACION POST.
-              
+              Tu respuesta DEBE un JSON basado en el esquema y comenzar con '{' y terminar con '}'. Absolutamente NADA de texto adicional antes o después del JSON.
         ESQUEMA JSON:
         ${textPost}
 
@@ -166,23 +165,15 @@ function promptPostFinalImg(postData){
     const textPostImg = JsonToPrompt(schemaPostFinalImg);
     const textPostInfo = JsonToPrompt(postData);
     
-    /*
+    
+    
+    return(`
     INSTRUCCION GENERAL:
         ${promptEpicModeImg}
         
         INSTRUCCION ESPECIFICA:
-        Crea una imagen para un post de rrss super eficaz utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote estrictamente en la INFORMACION POST.
+        Eres un agente especializado en análisis de información y generación de fotografías profesionales sin texto. Tu objetivo es Crear una imagen para un post de rrss super eficaz utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote estrictamente en el contenido dentro de las etiquetas "INFORMACION { }".
               
-        ESQUEMA JSON:
-        ${textPostImg}
-
-        INFORMACION POST:
-    */
-  
-    
-    return(`
-       
-Eres un agente especializado en análisis de información y generación de fotografías profesionales sin texto. Tu objetivo es:
 
 1. **ANALIZAR** el contenido dentro de las etiquetas "INFORMACION { }"
 2. **EXTRAER** los elementos visuales clave y el contexto
@@ -202,17 +193,9 @@ Eres un agente especializado en análisis de información y generación de fotog
 - Elimina conceptos abstractos que no se pueden fotografiar
 - Define el tipo de fotografía más apropiado (retrato, paisaje, producto, arquitectura, etc.)
 
-## ESTRUCTURA DE RESPUESTA OBLIGATORIA
-
-### **ANÁLISIS DE CONTEXTO:**
-[Resumen de los elementos clave extraídos de la información]
-
-### **PROMPT PRINCIPAL:**
-[Descripción visual detallada basada en la información] + professional photography, 8K ultra HD resolution, photorealistic, hyperrealistic details, no text, no watermark, no logos, no writing, text-free, clean composition, shot with professional DSLR camera, Canon EOS R5, appropriate lens selection, optimal aperture, studio-quality lighting, raw photo format, crisp sharp focus, commercial photography standard, high-end production value
+ professional photography, 8K ultra HD resolution, photorealistic, hyperrealistic details, no text, no watermark, no logos, no writing, text-free, clean composition, shot with professional DSLR camera, Canon EOS R5, appropriate lens selection, optimal aperture, studio-quality lighting, raw photo format, crisp sharp focus, commercial photography standard, high-end production value
 
 
-### **PROMPT NEGATIVO:**
-text, writing, words, letters, watermark, logo, signature, typography, captions, subtitles, overlay text, UI elements, low quality, blurry, amateur photography, phone camera, grainy, pixelated, distorted, artificial text overlays
 
 ### **ESPECIFICACIONES TÉCNICAS:**
 - **Tipo de fotografía:** [Retrato/Paisaje/Producto/etc.]
@@ -223,7 +206,7 @@ text, writing, words, letters, watermark, logo, signature, typography, captions,
 ## REGLAS CRÍTICAS
 
 ###  HACER SIEMPRE:
-- Garantizar que el prompt genere imágenes SIN TEXTO
+- Garantizar que generes imágenes SIN TEXTO
 - Incluir especificaciones de alta resolución
 - Usar términos fotográficos profesionales
 - Adaptar el estilo a la información proporcionada
@@ -232,9 +215,9 @@ text, writing, words, letters, watermark, logo, signature, typography, captions,
 ### NUNCA HACER:
 - Incluir elementos que puedan generar texto en la imagen
 - Usar descripciones vagas o genéricas
-- Omitir las especificaciones anti-texto en negativo
+- Omitir las especificaciones anti-texto en negativo: NO text, writing, words, letters, watermark, logo, signature, typography, captions, subtitles, overlay text, UI elements, low quality, blurry, amateur photography, phone camera, grainy, pixelated, distorted, artificial text overlays
 - Ignorar el contexto proporcionado en INFORMACION
-- Generar prompts que no sean fotográficamente realizables
+
 
 ## ADAPTABILIDAD CONTEXTUAL
 
@@ -266,14 +249,14 @@ PROMPT NEGATIVO:
 text, writing, words, letters, watermark, logo, signature, typography, captions, subtitles, overlay text, UI elements, low quality, blurry, amateur photography, phone camera, grainy, pixelated, distorted, artificial text overlays, unprofessional lighting, cluttered background
 El agente procesará automáticamente y entregará la respuesta estructurada con la imagen resultante del prompt generado ejecutado internamente.
 eliminando toda tipografia de la imagen.
+
+  ESQUEMA JSON:
+        ${textPostImg}
+
 INFORMACION {
 ${textPostInfo}
     }
 
-   ESQUEMA RESPUESTA JSON:    
-    ${textPostImg} 
-    
-    
 
     `)
 }
