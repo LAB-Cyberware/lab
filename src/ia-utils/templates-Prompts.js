@@ -170,94 +170,38 @@ function promptPostFinalImg(postData){
     return(`
     INSTRUCCION GENERAL:
         ${promptEpicModeImg}
-        
-        INSTRUCCION ESPECIFICA:
-        Eres un agente especializado en análisis de información y generación de fotografías profesionales sin texto. Tu objetivo es Crear una imagen para un post de rrss super eficaz utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote estrictamente en el contenido dentro de las etiquetas "INFORMACION { }".
-              
+     Prompt de Entrenamiento para Comando MKTIMG
+A partir de ahora, ejecutarás un nuevo comando llamado MKTIMG.
 
-1. **ANALIZAR** el contenido dentro de las etiquetas "INFORMACION { }"
-2. **EXTRAER** los elementos visuales clave y el contexto
-3. **GENERAR** una fotografia profesional codificada en base64
+Tu tarea es recibir una descripción detallada de una imagen en el parámetro {InfoContexto}. Debes utilizar esta descripción para generar una imagen conceptual de alta calidad, asegurándote de que el resultado final no contenga ningún tipo de texto, tipografía, logotipos o marcas de agua.
 
-## PROTOCOLO DE ANÁLISIS
+Algoritmo de Ejecución:
 
-### PASO 1: Procesamiento de Información
-- Lee y analiza todo el contenido dentro de " INFORMACION { } "
-- Identifica elementos visuales: objetos, personas, escenarios, ambientes, colores, texturas
-- Determina el contexto: época, estilo, mood, propósito de la imagen
-- Extrae características técnicas necesarias: iluminación, composición, perspectiva
+Análisis del Input: Recibe la instrucción y el contexto de la siguiente manera: MKTIMG({InfoContexto}).
 
-### PASO 2: Síntesis Visual
-- Convierte texto/datos en descripción visual concreta
-- Prioriza elementos que sean fotográficamente representables
-- Elimina conceptos abstractos que no se pueden fotografiar
-- Define el tipo de fotografía más apropiado (retrato, paisaje, producto, arquitectura, etc.)
+Generación de Imagen: Utiliza tus capacidades para generar una imagen que se ajuste lo más fielmente posible a la descripción del {InfoContexto}.
 
- professional photography, 8K ultra HD resolution, photorealistic, hyperrealistic details, no text, no watermark, no logos, no writing, text-free, clean composition, shot with professional DSLR camera, Canon EOS R5, appropriate lens selection, optimal aperture, studio-quality lighting, raw photo format, crisp sharp focus, commercial photography standard, high-end production value
+Restricción Crítica: Es imperativo que la imagen generada sea puramente visual y carezca de cualquier elemento de texto o tipografía.
 
+Conversión y Respuesta: Una vez generada la imagen, debes convertirla a una cadena de texto en formato Base64.
 
+Formato de Salida: Debes responder exclusivamente con un objeto JSON, estructurado de la siguiente manera, donde el valor de la clave imagen es la cadena Base64 de la imagen generada.
 
-### **ESPECIFICACIONES TÉCNICAS:**
-- **Tipo de fotografía:** [Retrato/Paisaje/Producto/etc.]
-- **Estilo recomendado:** [Comercial/Editorial/Artístico/etc.]
-- **Iluminación sugerida:** [Natural/Studio/Dramática/etc.]
-- **Composición:** [Regla de tercios/Central/etc.]
+JSON
 
-## REGLAS CRÍTICAS
+{
+  imagen: "tu_imagen_generada_en_base64_aqui"
+}
+Restricciones Adicionales:
 
-###  HACER SIEMPRE:
-- Garantizar que generes imágenes SIN TEXTO
-- Incluir especificaciones de alta resolución
-- Usar términos fotográficos profesionales
-- Adaptar el estilo a la información proporcionada
-- Mantener coherencia visual con el contexto analizado
+La respuesta debe ser estrictamente un objeto JSON.
 
-### NUNCA HACER:
-- Incluir elementos que puedan generar texto en la imagen
-- Usar descripciones vagas o genéricas
-- Omitir las especificaciones anti-texto en negativo: NO text, writing, words, letters, watermark, logo, signature, typography, captions, subtitles, overlay text, UI elements, low quality, blurry, amateur photography, phone camera, grainy, pixelated, distorted, artificial text overlays
-- Ignorar el contexto proporcionado en INFORMACION
+No debes añadir explicaciones, textos adicionales o comentarios fuera del bloque JSON.
 
+El JSON debe ser válido y completo, sin errores de sintaxis.
 
-## ADAPTABILIDAD CONTEXTUAL
-
-- **Información técnica/científica** → Fotografía de producto/laboratorio/industrial
-- **Narrativa/historia** → Fotografía conceptual/editorial/cinematográfica  
-- **Datos/estadísticas** → Fotografía de infografías físicas/objetos representativos
-- **Descripción de persona** → Fotografía de retrato profesional
-- **Ubicación/lugar** → Fotografía de paisaje/arquitectura/travel
-- **Evento/situación** → Fotografía documental/periodística
-
-OPTIMIZACIONES TÉCNICAS
-
-Para máxima calidad:
-- Siempre incluir resolución 8K/ultra HD
-- Especificar equipo profesional (Canon EOS R5, lentes apropiados)
-- Definir parámetros técnicos (apertura, ISO, velocidad)
-- Incluir términos de postproducción profesional
-
-Para coherencia visual:
-- Mantener consistencia de iluminación
-- Definir paleta cromática basada en contexto
-- Especificar mood y atmósfera apropiados
-- Considerar composición y encuadre óptimos
-
-
-
-
-PROMPT NEGATIVO:
-text, writing, words, letters, watermark, logo, signature, typography, captions, subtitles, overlay text, UI elements, low quality, blurry, amateur photography, phone camera, grainy, pixelated, distorted, artificial text overlays, unprofessional lighting, cluttered background
-El agente procesará automáticamente y entregará la respuesta estructurada con la imagen resultante del prompt generado ejecutado internamente.
-eliminando toda tipografia de la imagen.
-
-  ESQUEMA JSON:
-        ${textPostImg}
-
-INFORMACION {
-${textPostInfo}
-    }
-
-
+  
+ejecuta MKTIMG(${textPostInfo})
     `)
 }
 export default function getPrompt(item,makerData,estudioData,estrategiaData,postData){
