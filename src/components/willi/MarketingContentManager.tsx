@@ -50,7 +50,7 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
   // Estado para la sesión y el saldo
 
-  console.log(CampaniaMarketingData)
+  //console.log(CampaniaMarketingData)
 
   const { data: session, status } = useSession();
 
@@ -68,7 +68,7 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
     
     console.log(" =====  GENERATE POST post: ====== ")
-    console.log(post)
+    //console.log(post)
 
               try {
 
@@ -173,7 +173,7 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
           const GeneratePost = async ({ week, day, post }:any) => {
 
     console.log(" =====  GENERATE POST ======= ")
-    console.log({ week, day, post })
+    //console.log({ week, day, post })
 
               const getKey = (week:any, day:any) => `${week}_${day}`;
 
@@ -492,7 +492,7 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
                           const resultadoAccion = await ejecutarAccion(action, objectAction);
 
 console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
-console.log(resultadoAccion)
+//console.log(resultadoAccion)
 
                           // Verificar si la acción falló (ej. resultadoAccion.generated.texto contiene "Error:")
 
