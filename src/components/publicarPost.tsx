@@ -378,7 +378,7 @@ alert(`timestampOriginal ${timestampOriginal}`) //  2025-08-16T00:00:00.000Z
         ) : (
           <>
             <Send className="h-5 w-5" />
-            {scheduledDate && scheduledTime ? 'Programar' : 'Publicar'} esta Publicación en Facebook
+            Programar esta Publicación en Facebook
           </>
         )}
       </button>

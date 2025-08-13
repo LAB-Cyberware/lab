@@ -782,17 +782,6 @@ console.log(resultadoAccion)
                          imagen={generatedContent.imagen as string}
                          timestamp={dia.fecha}
                          />
-
-                        <button
-
-                        onClick={() =>
-
-                          handleUseTokens("generate-post", { week: weekIndex, day: dayIndex, post})
-
-                        }
-                        disabled>Programar Publicacion [pronto...]</button>
-                        
-
                     </div>
 
                   )}
