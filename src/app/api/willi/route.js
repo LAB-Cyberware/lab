@@ -34,8 +34,8 @@ const model = genAI.getGenerativeModel({
 
 export async function POST(req) {
   const dataR = await req.json();
-  console.log("@@@@@@@ POST POST ")
-  console.log(dataR)
+  //console.log("@@@@@@@ POST POST ")
+  //console.log(dataR)
   try {
     
     const finalPrompt = getPrompt(dataR.item,jsonToPrompt(dataR.maker),jsonToPrompt(dataR.estudio),jsonToPrompt(dataR.estrategia),jsonToPrompt(dataR.post));
@@ -47,7 +47,7 @@ export async function POST(req) {
             console.error(`Error writing file ${fileName}:`, err);
             return;
           }
-          console.log(`File ${fileName} saved to file system.`);
+          //console.log(`File ${fileName} saved to file system.`);
         });
       }
 
@@ -102,7 +102,7 @@ export async function POST(req) {
             return inlineData
           }
           else {
-            console.log(chunk.text);
+          //  console.log(chunk.text);
           }
         }
       }
@@ -119,20 +119,20 @@ export async function POST(req) {
       const result = await model.generateContent(finalPrompt); 
       let williTxt = result.response.text()
       
-      console.log("++++++++ WILLI Generate content say : williTxt +++++++++")
-      console.log(williTxt)
+     // console.log("++++++++ WILLI Generate content say : williTxt +++++++++")
+     // console.log(williTxt)
 
       let willJSON = jsonPure(williTxt)
       let williArray = new Array();
       williArray.push(JSON.parse(willJSON))
       let data = williArray[0];
-      console.log("++++++++ WILLI Generate content say : data +++++++++")
-      console.log(data)
+      //console.log("++++++++ WILLI Generate content say : data +++++++++")
+      //console.log(data)
       return NextResponse.json(data);
     }
 
   } catch (error) {
-    console.error("Error generating content:", error);
+   // console.error("Error generating content:", error);
     return NextResponse.json({ error: "Failed to generate content" }, { status: 500 });
   }
 }

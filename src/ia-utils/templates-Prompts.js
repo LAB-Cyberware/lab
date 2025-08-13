@@ -170,9 +170,7 @@ function promptPostFinalImg(postData){
     return(`
     INSTRUCCION GENERAL:
         ${promptEpicModeImg}
-     Prompt de Entrenamiento para Comando MKTIMG
 A partir de ahora, ejecutarás un nuevo comando llamado MKTIMG.
-
 Tu tarea es recibir una descripción detallada de una imagen en el parámetro {InfoContexto}. Debes utilizar esta descripción para generar una imagen conceptual de alta calidad, asegurándote de que el resultado final no contenga ningún tipo de texto, tipografía, logotipos o marcas de agua.
 
 Algoritmo de Ejecución:
@@ -192,14 +190,6 @@ JSON
 {
   imagen: "tu_imagen_generada_en_base64_aqui"
 }
-Restricciones Adicionales:
-
-La respuesta debe ser estrictamente un objeto JSON.
-
-No debes añadir explicaciones, textos adicionales o comentarios fuera del bloque JSON.
-
-El JSON debe ser válido y completo, sin errores de sintaxis.
-
   
 ejecuta MKTIMG(${textPostInfo})
     `)

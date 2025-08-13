@@ -31,51 +31,10 @@ interface ItemType {
 }
 
 
-export default function AppViewerClient() {
-    const [data,setData] = useState<DataType | null>(null);
+export default function AppViewerClient(data:any) {
+    
     const [isLoadingP, setIsLoadingP] = useState(true);
     const [errorP, setErrorP] = useState<string | null>(null);
-
-    const router = useRouter();
-    router.refresh();
-    const searchParams = useSearchParams();
-    useEffect( () => {
-    
-            //traer ficha completa Web App desde api data
-            const id = searchParams.get('id')
-            if (id){
-                const getFichaProyecto = async () => {
-                setIsLoadingP(true);
-                setErrorP(null);
-
-                try {
-                    const response = await fetch('/api/maker?p='+id);
-                    if(!response.ok){
-                        throw new Error(`<br>HTTP error! in Proyecto status: ${response.status}`);
-                    }
-
-                    const jsonData: DataType = await response.json();
-                    setData(jsonData);
-                
-                    }catch (e: any){
-                        setErrorP('<br>Error al cargar Data:'+e.message);
-                        setData(null);
-                    } finally {
-                        setIsLoadingP(false);
-                    }
-                };
-                getFichaProyecto();
-            }
-
-        },[]);
-
-
-    if(isLoadingP){
-    return <p>Cargando WebApp Data...</p>;
-    }
-    if(errorP){
-        return <p>Error cargando  WebApp Data: {errorP}</p>;
-    }
 
     const AppProyecto=data?.proyecto;
     const AppCatalogo=data?.catalogo;
@@ -138,7 +97,7 @@ export default function AppViewerClient() {
             <div className="catalog-grid">
  {/* AQUI DEBIERAMOS RECORRER EL CATALOGO E IMPRIMIR UNA TARJETA SIMPLE con el nombre del item */}
     {AppCatalogo && AppCatalogo.length > 0 ? (
-              AppCatalogo.map((item) => (
+              AppCatalogo.map((item:any) => (
                 <div className="product-card" key={item._id}>
                     <img src={item.foto} alt={item.nombre} className="product-image" />
                     <div className="product-info">
