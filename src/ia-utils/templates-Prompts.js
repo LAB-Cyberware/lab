@@ -15,7 +15,7 @@ function promptEpicMode(){
         4.  Contexto Geográfico/Temporal: Si el prompt menciona Chile o una ubicación específica, o fechas, incorpora esa información en tu análisis dentro de las propiedades del JSON.
         5.- debes tomar como referencia la siguiente fecha: ${fecha}. Todas las fechas indicadas en tu respuesta deben ser superiores a esta fecha.
         
-        Tu respuesta DEBE comenzar con '{' y terminar con '}'. Absolutamente NADA de texto adicional antes o después del JSON.
+        Tu respuesta DEBE comenzar con '{' y terminar con '}' como todo json. Absolutamente NADA de texto adicional antes o después del JSON.
       `)
 }
 
@@ -149,8 +149,8 @@ function promptPostFinal(postData){
         ${promptEpicMode}
         
         INSTRUCCION ESPECIFICA:
-        Realiza un Post Final campania de marketing digital super efectivo, eficaz y eficiente utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote en la descripcion de contexto de la INFORMACION POST.
-              Tu respuesta DEBE un JSON basado en el esquema y comenzar con '{' y terminar con '}'. Absolutamente NADA de texto adicional antes o después del JSON.
+        crea el texto para la publicacion definitivo para una campania de marketing digital super efectivo y eficaz utilizando todas tus capacidades y respondiendo en espanol de chile basandote en INFORMACION POST.
+              
         ESQUEMA JSON:
         ${textPost}
 

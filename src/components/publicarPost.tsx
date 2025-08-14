@@ -66,14 +66,19 @@ async uploadImageCloudinary(base64Image: string): Promise<string> {
     return result.url;
   }
 
-  async uploadImage(base64Image: string, message:string): Promise<string> {
+  async uploadImage(base64Image: string, message:string, scheduledTime:any): Promise<string> {
 
     const cloudinaryImage = await this.uploadImageCloudinary(base64Image)
-    const url = `/api/facebook/upload`;
-
+    const url = `/api/facebook/post`;
+       //scheduledTime
+    const scheduledTimeN = scheduledTime as number;
+    const finalTime = scheduledTimeN;
+   
     const payload = {
-      imageUrl: cloudinaryImage,
-      message: message
+      cloudinaryImage: cloudinaryImage,
+      message: message,
+      public: false,
+      scheduledTime: finalTime
     };
 
     const response = await fetch(url, {
@@ -94,13 +99,12 @@ console.log(payload);
    //return cloudinaryImage;
   }
 
+  /*
   async createScheduledPost(urlImage: string, message: string, scheduledTime?: number): Promise<string> {
 
     //const url = `${this.baseUrl}/${this.pageId}/feed`;
     const url = `/api/facebook/post`;
 
-    const fecha = new Date(scheduledTime as number);
-    const isoString = fecha.toISOString();
     //scheduledTime
     const scheduledTimeN = scheduledTime as number;
     const finalTime = scheduledTimeN;
@@ -127,6 +131,7 @@ console.log(payload);
     const result = await response.json();
     return result.id;
   }
+    */
 
   
 // #####################################################    //
@@ -139,20 +144,19 @@ console.log(payload);
       
       // ######     Subir a cloudinary,       ##################    //
       // ######     eliminar de cloudinary,       ##################    //
-      const urlImage = await this.uploadImage(base64Image, message);
+      const urlImage = await this.uploadImage(base64Image, message, scheduledTime);
       // ######     Subir a Facebook como post con el mensage y programado,       ##################    //
-      const postId = await this.createScheduledPost(urlImage, message, scheduledTime);
+      //const postId = await this.createScheduledPost(urlImage, message, scheduledTime);
 
 
        console.log("### publishPostWithImage urlImage: ###");
        console.log(urlImage);
        console.log("### publishPostWithImage postId: ###");
-       console.log(postId);
+       //console.log(postId);
       
       return {
         success: true,
         urlImage,
-        postId,
         scheduledTime,
         message: scheduledTime ? 'Post programado exitosamente' : 'Post publicado exitosamente'
       };
@@ -183,45 +187,31 @@ const PublicPost = ({
   imagen = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI/hcuH+wAAAABJRU5ErkJggg==", 
   timestamp 
 }: PublicPostProps) => {
-  const [scheduledDate, setScheduledDate] = useState('');
-  const [scheduledTime, setScheduledTime] = useState('');
   const timestampOriginal = timestamp;
+
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
   const [showResult, setShowResult] = useState(false);
   const accessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN as string;
   const pageId = process.env.FACEBOOK_PAGE_ID as string;
 
-  // Descomponer timestamp inicial
-  useEffect(() => {
-    if (timestamp) {
-      try {
-        const date = new Date(timestamp * 1000);
-        const dateStr = date.toISOString().split('T')[0];
-        const timeStr = date.toTimeString().slice(0, 5);
-        setScheduledDate(dateStr);
-        setScheduledTime(timeStr);
-      } catch (err) {
-        console.error('Error procesando timestamp:', err);
-      }
-    }
-  }, [timestamp]);
+  
 
   const getScheduledTimestamp = (): number | null => {
-    console.log("### getScheduledTimestamp scheduledDate: ### ")
-    console.log(scheduledDate)
-    console.log("### getScheduledTimestamp scheduledTime: ### ")
-    console.log(scheduledTime)
-    
-    if (!scheduledDate || !scheduledTime) return null;
     
     try {
-      //const dateTime = new Date(`${scheduledDate}T${scheduledTime}`);
-      const dateTime = timestampOriginal;
+      alert("### @@ getScheduledTimestamp @@ ### ")
+       alert("### getScheduledTimestamp timestampOriginal: ### ")
+      alert(timestampOriginal)
+      const dateTime = new Date(`${timestampOriginal}`);
+      //const dateTime = timestampOriginal;
+      
+      alert("### getScheduledTimestamp dateTime: ### ")
+      alert(dateTime)
       const timestamp = FacebookPostHandler.dateToUnixTimestamp(dateTime);
 
-      console.log("### getScheduledTimestamp timestamp: ### ")
-      console.log(timestamp)
+       alert("### getScheduledTimestamp timestamp: ### ")
+      alert(timestamp)
       
       if (!FacebookPostHandler.isValidScheduleTime(timestamp)) {
         alert('La fecha debe estar entre 10 minutos y 6 meses en el futuro');
@@ -260,20 +250,8 @@ const PublicPost = ({
     try {
       const handler = new FacebookPostHandler(accessToken, pageId);
   
-// ###########  ESTABLECER FECHA HORA   ############################    //
-
-alert(`scheduledDate ${scheduledDate}`) // 2025-01-01
-alert(`scheduledTime ${scheduledTime}`) // 12:21
-alert(`timestampOriginal ${timestampOriginal}`) //  2025-08-16T00:00:00.000Z
-
-
 
       const timestampToUse = getScheduledTimestamp();
-      
-      if (scheduledDate && scheduledTime && timestampToUse === null) {
-        setIsLoading(false);
-        return;
-      }
       
     // #########   PUBLICAR EN FACEBOOK   ###########################    //
       const publishResult = await handler.publishPostWithImage(imagen, texto, timestampToUse || undefined);

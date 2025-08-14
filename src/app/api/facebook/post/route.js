@@ -2,8 +2,8 @@
 
 export async function POST(request) {
   try {
-    const { message, mediaFbid, scheduledTime } = await request.json();
-
+    const { message, cloudinaryImage, scheduledTime } = await request.json();
+    
     // Validaciones
     if (!message) {
       return Response.json({ 
@@ -11,9 +11,9 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    if (!mediaFbid) {
+    if (!cloudinaryImage) {
       return Response.json({ 
-        error: 'Media Facebook ID (mediaFbid) is required' 
+        error: 'Media Cloudinary (imageUrl) is required' 
       }, { status: 400 });
     }
 
@@ -69,22 +69,13 @@ export async function POST(request) {
     //attached_media: [{ media_fbid: mediaFbid }],
     const payload = {
       message: message,
-      source:mediaFbid,
+       link: cloudinaryImage,
       published: false,
       scheduled_publish_time: scheduledTime,
       access_token: pageAccessToken
     };
-
-    // Agregar tiempo programado si se proporciona
-//    if (scheduledTime) {
-      // Convertir a Unix timestamp si es necesario
-      
-      //const scheduledDate = new Date(scheduledTime);
-      //payload.scheduled_publish_time = Math.floor(scheduledDate.getTime() / 1000);
-      
-  //  }
-
-    // Hacer la petición a Facebook Graph API
+ 
+    
     const facebookApiUrl = `https://graph.facebook.com/v18.0/${pageId}/feed`;
     
     const response = await fetch(facebookApiUrl, {
@@ -154,9 +145,8 @@ export async function GET() {
       pageId: pageId ? '✅ Configured' : '❌ Missing',
       pageIdValue: pageId || 'Not configured'
     },
-    requiredFields: ['message', 'mediaFbid'],
-    optionalFields: ['scheduledTime'],
-    scheduling: {
+    requiredFields: ['message','scheduledTime'],
+      scheduling: {
       minAdvanceTime: '10 minutes',
       timeFormat: 'ISO string or Unix timestamp',
       examples: [
@@ -167,11 +157,11 @@ export async function GET() {
     example: {
       immediatePost: {
         message: 'Check out this amazing photo!',
-        mediaFbid: '123456789012345'
+        imageUrl: '123456789012345'
       },
       scheduledPost: {
         message: 'Scheduled post with photo',
-        mediaFbid: '123456789012345',
+        imageUrl: '123456789012345',
         scheduledTime: '2024-12-25T15:30:00Z'
       }
     }

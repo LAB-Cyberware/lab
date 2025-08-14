@@ -754,7 +754,7 @@ console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
 
                   <p className="text-md font-bold text-indigo-700 mb-2">
 
-                    Día: {dia.nombre} ({dia.fecha})
+                    Día: {dia.nombre} ({dia.fecha}) hora: [{post.hora}]
 
                   </p>
 
