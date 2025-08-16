@@ -200,18 +200,18 @@ const PublicPost = ({
   const getScheduledTimestamp = (): number | null => {
     
     try {
-      alert("### @@ getScheduledTimestamp @@ ### ")
-       alert("### getScheduledTimestamp timestampOriginal: ### ")
-      alert(timestampOriginal)
+    //  alert("### @@ getScheduledTimestamp @@ ### ")
+    //   alert("### getScheduledTimestamp timestampOriginal: ### ")
+    //  alert(timestampOriginal)
       const dateTime = new Date(`${timestampOriginal}`);
       //const dateTime = timestampOriginal;
       
-      alert("### getScheduledTimestamp dateTime: ### ")
-      alert(dateTime)
+   //   alert("### getScheduledTimestamp dateTime: ### ")
+   //   alert(dateTime)
       const timestamp = FacebookPostHandler.dateToUnixTimestamp(dateTime);
 
-       alert("### getScheduledTimestamp timestamp: ### ")
-      alert(timestamp)
+  //     alert("### getScheduledTimestamp timestamp: ### ")
+  //    alert(timestamp)
       
       if (!FacebookPostHandler.isValidScheduleTime(timestamp)) {
         alert('La fecha debe estar entre 10 minutos y 6 meses en el futuro');

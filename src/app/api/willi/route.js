@@ -8,10 +8,7 @@ import jsonToPrompt from "@/utils/JsonToPrompt";
       //gemini-2.0-flash-preview-image-generation
       import {
         GoogleGenAI,
-      } from '@google/genai';
-      import mime from 'mime';
-      import { writeFile } from 'fs';
-      
+      } from '@google/genai';    
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
 const model = genAI.getGenerativeModel({
@@ -19,7 +16,7 @@ const model = genAI.getGenerativeModel({
   system_instruction: {
     parts: [
       {
-        text: `Eres una IA experta en Marketing, Neuroventas, Psicología, Optimización de Recursos y Administración de Empresas`
+        text: `Eres una IA experta en Marketing, Neuroventas, Psicología, Sociología, Optimización de Recursos y Administración de Empresas`
       }
     ]
   },
@@ -40,27 +37,8 @@ export async function POST(req) {
     
     const finalPrompt = getPrompt(dataR.item,jsonToPrompt(dataR.maker),jsonToPrompt(dataR.estudio),jsonToPrompt(dataR.estrategia),jsonToPrompt(dataR.post));
     if(dataR.item=="post-final-img"){
-      const fileMetaName = btoa(dataR.post.titulo);
-      function saveBinaryFile(fileName, content) {
-        writeFile(fileName, content, 'utf8', (err) => {
-          if (err) {
-           // console.error(`Error writing file ${fileName}:`, err);
-            return;
-          }
-          //console.log(`File ${fileName} saved to file system.`);
-        });
-      }
-
-    /*  async function savePostImg(data){    
-            connectDB();
-            const newData = new PostImage(data)
-            const savedData = await newData.save() 
-            console.log(savedData);          
-            return NextResponse.json({"message": "holas proyecto POST"});
-      }
-            */
-      
-      async function main() {
+        async function main() {
+        let info;
         const ai = new GoogleGenAI({
           apiKey: process.env.GOOGLE_GEMINI_API_KEY,
         });
@@ -93,15 +71,16 @@ export async function POST(req) {
             continue;
           }
           if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
-            const fileName = `${process.env.POST_IMAGES_DIR}/${fileMetaName}`;
+          //  const fileName = `${process.env.POST_IMAGES_DIR}/${fileMetaName}`;
             const inlineData = chunk.candidates[0].content.parts[0].inlineData;
-            const fileExtension = mime.getExtension(inlineData.mimeType || '');
-            const buffer = Buffer.from(inlineData.data || '', 'base64');
-            saveBinaryFile(`${fileName}.${fileExtension}`, buffer);
+          //  const fileExtension = mime.getExtension(inlineData.mimeType || '');
+          //  const buffer = Buffer.from(inlineData.data || '', 'base64');
+          //  saveBinaryFile(`${fileName}.${fileExtension}`, buffer);
             //savePostImg(`${fileName}.${fileExtension}`)
             return inlineData
           }
           else {
+            info = chunk.text
           //  console.log(chunk.text);
           }
         }
@@ -109,6 +88,8 @@ export async function POST(req) {
       
       const result_img = await main(); 
       let williTxt = result_img;
+      console.log("WILLI : williTxtImg")
+      console.log(williTxt)
       let willJSON = jsonPure(williTxt)
       let williArray = new Array();
       williArray.push(JSON.parse(willJSON))
@@ -118,6 +99,10 @@ export async function POST(req) {
     }else{
       const result = await model.generateContent(finalPrompt); 
       let williTxt = result.response.text()
+      
+      console.log("WILLI : williTxt")
+      console.log(williTxt)
+
       
      // console.log("++++++++ WILLI Generate content say : williTxt +++++++++")
      // console.log(williTxt)
@@ -133,6 +118,6 @@ export async function POST(req) {
 
   } catch (error) {
    // console.error("Error generating content:", error);
-    return NextResponse.json({ error: "Failed to generate content" }, { status: 500 });
+    return NextResponse.json({ error: `Failed to generate content ${error}` }, { status: 500 });
   }
 }
