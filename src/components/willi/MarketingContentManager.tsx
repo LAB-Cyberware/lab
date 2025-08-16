@@ -114,7 +114,8 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
                       const texto_final = res.texto;
 
-
+console.log("=== response willi post text: ")
+console.log(texto_final)
 
                       if (response_imagen.ok) {
 
@@ -122,6 +123,8 @@ const MarketingContentManager: React.FC<MarketingContentManagerProps> = ({ Campa
 
                           const imagen_final = res_img[0].data;
 
+console.log("=== response willi post image: ")
+console.log(imagen_final)
                           const response_final = {
 
                               texto: texto_final,
