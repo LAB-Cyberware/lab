@@ -784,6 +784,7 @@ console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
                          texto={generatedContent.texto as string}
                          imagen={generatedContent.imagen as string}
                          timestamp={dia.fecha}
+                         hora={post.hora}
                          />
                     </div>
 

@@ -15,6 +15,7 @@ interface PublicPostProps {
   texto?: string;
   imagen?: string; // base64 image
   timestamp?: any; // Unix timestamp
+  hora:string;
 }
 
 const FACEBOOK_PAGE_ACCESS_TOKEN="EAAYaxPxJIGEBPB2ywS1aHrh1hVdFjYtzDN0uidD70nNZASN7VSME2fJ0FvtWQGmkG7oWj3ZA5OfWckZB86EY4mMlot5ZCdwvfpf59k2KiBMGUsVfRLmOKikZAnBRUT5zog3TEobWXIandkZCz5MLSWwEsPkdegwZCNlUjNAXA96nnaaYHo4bV5vrvvzHSG578kVcB6Q7kBZC"
@@ -185,9 +186,11 @@ console.log(payload);
 const PublicPost = ({ 
   texto = "Texto de ejemplo para la publicación 🚀", 
   imagen = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI/hcuH+wAAAABJRU5ErkJggg==", 
-  timestamp 
+  timestamp,
+  hora 
 }: PublicPostProps) => {
   const timestampOriginal = timestamp;
+  const horaOriginal = hora;
 
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PublishResult | null>(null);
@@ -203,7 +206,8 @@ const PublicPost = ({
     //  alert("### @@ getScheduledTimestamp @@ ### ")
     //   alert("### getScheduledTimestamp timestampOriginal: ### ")
     //  alert(timestampOriginal)
-      const dateTime = new Date(`${timestampOriginal}`);
+      const dateTime = new Date(`${timestampOriginal.substring(0,11)}${horaOriginal}`);
+     // alert(`${timestampOriginal.substring(0,11)}${horaOriginal}`)
       //const dateTime = timestampOriginal;
       
    //   alert("### getScheduledTimestamp dateTime: ### ")
