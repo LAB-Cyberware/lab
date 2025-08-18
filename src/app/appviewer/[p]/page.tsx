@@ -16,7 +16,6 @@ export default async function DynamicPage({ params }: CampaniaMarketingPageProps
     // entre el Server Component y una API Route dentro del mismo proyecto;
     // en su lugar, se invoca directamente el handler de la API Route.
     // `process.env.NEXT_PUBLIC_BASE_URL` debe estar configurado en tu `.env.local`
-    // (ejemplo: NEXT_PUBLIC_BASE_URL=http://localhost:3000)
     const apiUrl = `/api/maker?p=${itemId as string}`; // Ruta a tu API Route dinámica
 
     const res = await fetch(apiUrl, {

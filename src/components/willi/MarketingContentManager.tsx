@@ -645,7 +645,7 @@ console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
 
         } else if (exec.generated.texto === "Saldo Insuficiente.") {
 
-          setPostError((prev) => new Map(prev).set(key, "Saldo insuficiente para generar este post."));
+          setPostError((prev) => new Map(prev).set(key, `Saldo insuficiente para generar este post.`));
 
         } else {
 
@@ -800,8 +800,12 @@ console.log("%%%%%%% useTokens (descuento exitoso ) resultadoAccion: %%%%%%")
                   )}
 
                   {currentPostError && (
-
+                    <>
                     <p className={commonClasses.errorText}>{currentPostError}</p>
+                    <a href="/dashboard"> <button className="rounded p-1 text-sm font-bold text-white bg-orange-500">conseguir TokensPack Gratis!</button></a>
+                    <hr/>
+                    <a href="/buytokens"> <button className="rounded p-1 text-sm font-bold text-white bg-blue-500">Recarga Tokens Aqui!</button></a>
+                    </>
 
                   )}
 

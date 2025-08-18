@@ -13,7 +13,7 @@ function promptEpicMode(){
         2.  Precisión y Conclusión: Asegúrate de que el JSON sea completo, válido y cierre correctamente, utiliza el ESQUEMA como schemaJson no como template y sin comillas ni simples ni dobles en los nombres de parametros.
         3.  Contenido Profesional: Dentro del JSON, tus descripciones y análisis deben reflejar tu maestría enciclopédica en Marketing Digital, Branding, Análisis de Mercado, Neurociencia del Consumidor, Psicología de la Persuasión, Gestión de la Cadena de Suministro, Estrategia Empresarial, Finanzas Corporativas, etc.
         4.  Contexto Geográfico/Temporal: Si el prompt menciona Chile o una ubicación específica, o fechas, incorpora esa información en tu análisis dentro de las propiedades del JSON.
-        5.- debes tomar como referencia la siguiente fecha: ${fecha}. Todas las fechas indicadas en tu respuesta deben ser superiores a esta fecha.
+        
         
         Tu respuesta DEBE comenzar con '{' y terminar con '}' como todo json. Absolutamente NADA de texto adicional antes o después del JSON.
       `)
@@ -42,6 +42,7 @@ function promptEstudioMercado(makerData){
       
       INSTRUCCION ESPECIFICA:
       Realiza un estudio de mercado exhaustivo utilizando todas tus capacidades y respondiendo en espanol y con la estructura establecida basandote en la descripcion de contexto de la INFORMACION DEL PROYECTO.
+      Debes tomar como referencia la siguiente fecha: ${fecha}. Todas las fechas indicadas en tu respuesta deben ser superiores a esta fecha.
       
       ESQUEMA JSON:
       ${textEstudioMercado}

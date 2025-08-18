@@ -63,7 +63,7 @@ export default async function CampaniaMarketingPage({ params }: CampaniaMarketin
 
   try {
    
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXTAUTH_URL;
     const apiUrl = `${baseUrl}/api/campania-marketing?p=${itemId}`; // Ruta a tu API Route dinámica
 
     const res = await fetch(apiUrl, {
