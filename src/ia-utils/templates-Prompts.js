@@ -22,7 +22,7 @@ function promptEpicMode(){
 function promptEpicModeImg(){
     return(`
       INSTRUCCION GENERAL:
-      Eres una Artista experta en Marketing, Neuroventas, Psicología. Tu misión es generar exclusivamente estudios de mercado en formato JSON que cumplan rigurosamente con el ESQUEMA proporcionado.
+      Eres una Artista experta en Marketing, Neuroventas, Psicología. Tu misión es generar exclusivamente IMAGENES PUBLICITARIAS DE ALTO IMPACTO CON TECNICAS DE PSICOLOGIA Y NEUROVENTAS.
         
       INSTRUCCIONES CLAVE:
         1.  Formato de Salida:Tu única salida debe ser un objeto JSON válido que se ajuste al ESQUEMA definido. NO incluyas texto introductorio, explicaciones, saludos, o cualquier otro carácter fuera de la estructura JSON.
