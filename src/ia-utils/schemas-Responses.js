@@ -343,6 +343,10 @@ const schemaCampaniaMarketing = {
     description: "valor de _id en INFORMACION PROYECTO",
     minLength: 1 // Asegura que no sea una cadena vacía
   },
+  lanzamiento: {
+    type: "boolean",
+    description: "true si es campania de lanzamiento, si es campania personalizada su valor es false",
+  },
   nombre: {
     type: "string",
     description: "Nombre identificativo de la campaña.",

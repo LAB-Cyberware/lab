@@ -163,6 +163,10 @@ const CampaniaMarketingSchema = new Schema({
     required: [true, "El ID del proyecto es requerido."],
     minlength: [1, "El ID del proyecto debe tener al menos 1 carácter."]
   },
+  lanzamiento: {
+    type: Boolean,
+    required: [true, "marca de lanzamiento si/no es requerido"]
+  },
   nombre: {
     type: String,
     required: [true, "El nombre de la campaña es requerido."],

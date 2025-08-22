@@ -57,6 +57,7 @@ form h1 {
 .boton-cancelar,
 .product-button,
 .button-add-item,
+.button-cancel,
 .button-add-proyecto,
 .button-agregar-item,
 .nav-button,
@@ -88,7 +89,7 @@ form h1 {
 }
 
 .boton-cancelar {
-  background-color: rgb(53, 53, 53); /* Kept original dark gray */
+  background-color: rgb(122, 122, 122); /* Kept original dark gray */
 }
 
 /* Combined .btnfinalizar, .btncancelar */
