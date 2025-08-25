@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
         GoogleGenAI,
       } from '@google/genai';    
 
-export async function POST(req) {
+export async function POST(request) {
   const { prompt, image } = await request.json();
   try {
 
@@ -24,8 +24,9 @@ export async function POST(req) {
           aspectRatio: "1:1",
         };
 
-        
-        const model = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
+        // ENV: GOOGLE_GEMINI_API_MODET_TEXT="gemini-2.0-flash-001"
+        //const model = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
+        const model = "gemini-2.0-flash-001";
 
         let base64Data;
         if (image) {
