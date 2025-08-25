@@ -31,6 +31,10 @@ textarea {
 input[type=button] {
   color: white;
 }
+input[type=checkbox] {
+  width:unset;
+  display: inline-flex;
+}
 
 .oculto {
   display: none;

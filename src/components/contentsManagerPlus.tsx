@@ -2,14 +2,17 @@
 
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { Spinner } from '@heroui/react';
 import PublicPost from "@/components/publicarPost"
 import {
   ContentsManegerPlusProps,
   CampaniaMarketingPlusData,
   Semana,
-  Dia
+  Dia,
+  EstudioMercadoData,
+  EstrategiaMarketingData,
+  CampaniaMarketingData
 } from "../types/marketingWorkflowTypes";
 import GWV from "@/utils/GWV";
 import { useSession } from 'next-auth/react'; // Importar useSession correctamente
@@ -19,7 +22,7 @@ interface GeneratedContent {
   imagen: string | null;
 }
 
-const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ campanias,idProyecto }) => {
+const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ estrategia,campanias,idProyecto }) => {
   
     const { data: session, status } = useSession();
     const currentUserEmail = session?.user?.email;
@@ -31,6 +34,28 @@ const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ campanias,idPr
     const [saldo, setSaldo] = useState<any | null>(null);
     const [isAddCampaniaModalOpen, setAddCampaniaModalOpen] = useState(false);
     const [newCampania, setNewCampania] = useState<any | null>(null);
+    const [newInfoCampania,setInfoCampania] =  useState<any | null>(null);
+
+
+    // DATA PARA LA CREACION DE CAMPAÑA
+      const [dataCampaniaMarketing, setDataCampaniaMarketing] = useState<CampaniaMarketingData | null>(null);
+      const [dataMaker, setMaker] = useState<any | null>(null);
+    
+      // Estados para controlar la existencia en BD (boolean o null inicial)
+      const [existeEstudio, setExisteEstudio] = useState<boolean | null>(null);
+      const existeEstrategia = estrategia;
+
+      //  SI NO HAY ESTRATEGIA 
+          // mostrar boton IR A STEP BY STEP MKT FLOW
+
+      // SI HAY ESTRATEGIA
+          // Mostrar boton CREAR CAMPANIA
+          
+          
+
+      //const [existeCampania, setExisteCampania] = useState<boolean | null>(initialCampania||null);
+
+
 
     const commonClasses = {
         container: "bg-white p-8 rounded-lg shadow-xl w-full max-w-6xl mx-auto my-8 font-sans",
@@ -56,7 +81,7 @@ const handleAddCampaniaClick = (campania: any) => {
 
   const handelSaveCampania = async () => { // Convertir a async para esperar la eliminación
     if (newCampania) {
-      await saveCampania(newCampania); // Esperar a que se complete la eliminación
+      await generateCampania(newCampania); // Esperar a que se complete la eliminación
       closeAddCampaniaModal();
     }
   };
@@ -66,38 +91,51 @@ const handleAddCampaniaClick = (campania: any) => {
     setNewCampania(null); // Limpiar itemToDelete
   };
 
-  const saveCampania = async (newCampania: any) => {
-    try {
-      const res = await fetch(`/api/campania-marketing-plus/${idProyecto}`, {
-        method: "POST",
-        body: JSON.stringify(newCampania),
-        headers: {
-          "Content-Type": "application/json"           
-        },
-      });
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || `Error al eliminar: ${res}`);
-      }
-      const data = await res.json();
-      alert("Eliminado correctamente"); // Considerar usar notificaciones menos intrusivas
-      console.log(data);
-      // La actualización de la lista se hará en handelConfirmDelete
-    } catch (error: any) {
-      console.error("Error en eliminar:", error);
-      alert(`Error al eliminar: ${error.message}`);
-    }
+  const generateCampania = async (newCampania: any) => {
+
+    //traer DATA NECESARIA
+      // maker
+      const makerData = await GWV('check',idProyecto,"maker");
+      if(makerData){setMaker(makerData)}
+      // estudio
+      const estudioExistente = await GWV('check',idProyecto,"estudio-mercado");
+      if(estudioExistente){setExisteEstudio(estudioExistente)}
+      // estrategia
+      const estrategiaExistente = await GWV('check',idProyecto,"estrategia-marketing");
+
+      if(makerData && estudioExistente && estrategiaExistente){
+        try {
+          const payload = {
+            maker:"",
+            estudio:"",
+            estrategia:"",
+            item:"campania-marketing"
+          }
+          const res = await fetch(`/api/willi/`, {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+              "Content-Type": "application/json"           
+            },
+          });
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || `Error al eliminar: ${res}`);
+          }
+          const data = await res.json();
+          alert("Eliminado correctamente"); // Considerar usar notificaciones menos intrusivas
+          console.log(data);
+          // La actualización de la lista se hará en handelConfirmDelete
+        } catch (error: any) {
+          console.error("Error en eliminar:", error);
+          alert(`Error al eliminar: ${error.message}`);
+        }
+      }else{
+        alert("se requiere generar el Estudio de Mercado y la Estrategia General de Marketing para el Proyecto, ejecuta el Paso a Paso de Marketing para poder genear una Campaña.")
+      }  
+
+    
   };
-
-
-
-
-
-
-
-
-
-
 
     const handelerSelectCampania = async () =>{
             try {
@@ -302,6 +340,10 @@ const handleAddCampaniaClick = (campania: any) => {
               }
           }
 
+const handleChangeTarget = () => {
+  alert("change target")
+}
+
   useEffect(() => {
     const getThisPrice = async () => {
       const responsePrice = await getPrice("generate-post");
@@ -339,24 +381,27 @@ const handleAddCampaniaClick = (campania: any) => {
         title="Configurar Nueva Campaña"
         message={
           <>
-            <p>Nueva Campaña</p>
+            <p>Establece los lineamientos que harán única a esta campaña personalizada</p>
            
               <div className="mt-2 p-3 bg-gray-100 rounded">
                 <p>
                   <strong>Objetivo</strong>
-                  <textarea></textarea>
+                  <textarea onChange={handleChange}   placeholder="Ejemplo: Vender el servicio de asesorías... o Dar a conocer nuestra promoción de Verano..."></textarea>
                 </p>
                 <p>
-                  <strong>Target</strong>
-                  <textarea></textarea>
+                  <input onChange={handleChange} type="checkbox" name="target-default" id="target-default" value="1" defaultChecked></input>usar Target de Negocio (<strong>{estrategia?.analisis_mercado_target.identificacion_target}</strong>)  
+                  <br />o <br />
+
+                  <strong>Definir un Target Especifico de Campaña</strong>
+                  <textarea onChange={handleChange}  placeholder="Al definir un Target Especifico de Campaña aqui, reemplazará automaticamente al target de Negocio."></textarea>
                 </p>
                  <p>
                   <strong>Fecha Inicio </strong>(Fecha Primera Publicacion)
-                  <input></input>
+                  <input onChange={handleChange}   type="date" name="fecha-inicio" id="fecha-inicio"></input>
                 </p>
                  <p>
                   <strong>Diracion (Días)</strong>
-                  <input type="number" min="5" max="30" step="5"></input> 
+                  <input onChange={handleChange}  type="number" min="5" max="30" step="5" defaultValue="5"></input> 
                 </p>
               </div>
           
@@ -373,6 +418,17 @@ const handleAddCampaniaClick = (campania: any) => {
           );
         }
   
+    const handleChange = (
+      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+      setInfoCampania({ ...newInfoCampania, [e.target.name]: e.target.value });
+    };
+  
+
+
+
+
+
   const getKey = (weekIndex: number, dayIndex: number) => `${weekIndex}_${dayIndex}`;
   const handleUseTokens = async (action: string, objectAction: any) => {
   const key = getKey(objectAction.week, objectAction.day);
@@ -402,13 +458,23 @@ const handleAddCampaniaClick = (campania: any) => {
     }
   };
 
+  if (!estrategia) {
+    return (
+      <div className={commonClasses.container}>
+        <h2 className="text-2xl font-bold text-center text-gray-700">
+          Oops! Primero debes sentar las Bases Técnicas, Estudio de Mercado y Estrategia de Marketing general de tu proyecto. 
+        </h2>
+        <a href={`/mktviewer/${idProyecto}`}><button  className="button-add-item">Comenzar el Marketing WorkFlow...</button></a>
+      </div>
+    );
+  }
   if (!campanias) {
     return (
       <div className={commonClasses.container}>
         <h2 className="text-2xl font-bold text-center text-gray-700">
           Oops! No hay datos de campaña o planificación de contenido disponible.
         </h2>
-        <button>Generar Nueva Campaña de Marketing RRSS Personalizada</button>
+        <button  className="button-add-item">Generar Nueva Campaña de Marketing RRSS Personalizada</button>
       </div>
     );
   }

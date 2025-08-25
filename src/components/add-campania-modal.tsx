@@ -1,3 +1,4 @@
+import { EstrategiaMarketingData } from '@/types/marketingWorkflowTypes';
 import { ReactNode } from 'react';
 
 interface AddCampaniaModalProps {

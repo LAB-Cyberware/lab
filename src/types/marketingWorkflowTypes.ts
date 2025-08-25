@@ -260,6 +260,7 @@ export interface MarketingContentManagerProps {
 }
 
 export interface ContentsManegerPlusProps {
+  estrategia:EstrategiaMarketingData|null;
   campanias:CampaniaMarketingPlusData[]|null;
   idProyecto:string|null;
 }

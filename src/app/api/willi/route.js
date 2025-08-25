@@ -48,7 +48,10 @@ export async function POST(req) {
               'TEXT',
           ],
           responseMimeType: 'text/plain',
+          aspectRatio: "1:1",
         };
+
+        
         const model = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
         const contents = [
           {
