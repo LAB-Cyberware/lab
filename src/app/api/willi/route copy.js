@@ -26,6 +26,11 @@ export async function POST(req) {
 
         
         const model = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
+
+        let base64Data;
+        if (image) {
+            base64Data = image.replace(/^data:image\/[^;]+;base64,/, '');
+          }
         const contents = [
           {
             role: 'user',
@@ -33,10 +38,19 @@ export async function POST(req) {
               {
                 text: `${prompt}`,
               },
+              {
+              inlineData: {
+                mimeType: "image/jpeg", 
+                data: base64Data
+              }
+            }
             ],
           },
         ];
-      
+
+         
+
+          
         const response = await ai.models.generateContentStream({
           model,
           config,
@@ -55,6 +69,8 @@ export async function POST(req) {
           }
         }
       }
+
+      
       
       const result = await main(); 
       console.log('Resultado de Gemini API:', result);
