@@ -157,217 +157,77 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
   
   
             const descontarTokens = async (montoADejar:number, currentUserEmail:string) => {
-  
-                // El 'monto' aquí es el saldo final después del descuento, no la cantidad a descontar.
-  
-                // La API /api/user-tokens (PUT) debe estar diseñada para SETear el saldo.
-  
-                /*
-  
-                if (typeof montoADejar !== 'number' || montoADejar < 0) {
-  
-                    return null; // O false para indicar fallo
-  
-                }
-  
-                if (!currentUserEmail) {
-  
-                    return null;
-  
-                }
-  
-                    */
-  
-  
-  
-  
-  
-  
-  
                 const bodyData = JSON.stringify({ tokens: montoADejar, email:currentUserEmail }); // La API debe interpretar esto como el nuevo saldo
-  
                 try {
-  
                     const response = await fetch(`/api/user-tokens`, { // Asumiendo API RESTful
-  
                         method: 'PUT',
-  
                         headers: { 'Content-Type': 'application/json' },
-  
                         body: bodyData,
-  
                     });
-  
                     if (!response.ok) {
-  
                         const errorData = await response.json().catch(() => ({}));
-  
                         return null; // O false
-  
                     }
-  
                     return await response.json(); // O true si la API devuelve el usuario actualizado o un success
-  
                 } catch (e) {
-  
                     return null; // O false
-  
                 }
-  
             }
-  
-            // -----------------------------------------------
-  
-  
-  
-            // historyTokens no se usa, se podría eliminar.
-  
-  
-  
-            // -----------------------------------------------
-  
-  
-  
             const rollBackTokens = async (saldoOriginal:any, currentUserEmail:any) => {
-  
-                // Esta función es esencialmente la misma que descontarTokens si la API SETea el saldo.
-  
                 console.log(`rollBackTokens: Restaurando saldo a ${saldoOriginal} para ${currentUserEmail}`);
-  
                 return await descontarTokens(saldoOriginal, currentUserEmail); // Reutilizar descontarTokens
-  
             }
-  
-  
-  
-            // main?
-  
             const useTokens = async (action:any, objectAction:any) => {
-  
-               
-  
                 if (currentUserEmail) {
-  
                     const saldoActual = await validarSaldo(currentUserEmail);
-  
-  
-  
-                   
-  
-  
-  
                     const price = await getPrice(action);
-  
                     if (price === null) { // getPrice ahora devuelve null en error
-  
                         return { key: action, generated: { texto: `Error: No se pudo determinar el costo de la acción.`, imagen: null } };
-  
                     }
-  
-  
-  
-                   
-  
                     if (saldoActual === null) {
-  
                         return { key: action, generated: { texto: `Error: No se pudo verificar el saldo.`, imagen: null } };
-  
                     }
-  
-  
-  
                     if (saldoActual >= price) {
-  
                         const saldoDespuesDelDescuento = saldoActual - price;
-  
                         const descuentoExitoso = await descontarTokens(saldoDespuesDelDescuento, currentUserEmail);
-  
-  
-  
                         if (descuentoExitoso) { // Asumiendo que descontarTokens devuelve algo truthy en éxito
-  
                             const resultadoAccion = await ejecutarAccion(objectAction);
-
-   console.log(`@@@@ Use Tokens: action[${action}] & result:`)
-  console.log(resultadoAccion)
-  
-  
-                            // Verificar si la acción falló (ej. resultadoAccion.generated.texto contiene "Error:")
-  
-                            if (resultadoAccion.generated && resultadoAccion.generated.texto.startsWith("Error:")) {
-  console.log(`@@@@ Use Tokens: action[${action}] & ERROR result:`)
-  console.log(resultadoAccion)
+                           if (resultadoAccion.generated && resultadoAccion.generated.texto.startsWith("Error:")) {
                                await rollBackTokens(saldoActual, currentUserEmail); // Devolver tokens al saldo original
-  
                                 return {
-  
                                     key: action,
-  
                                     generated: {
-  
                                         texto: "Oops! Fallo en la generación de contenido (error en ejecucion de Accion). Tus tokens han sido restaurados. Inténtalo de nuevo.",
-  
                                         imagen: null
-  
                                     }
-  
                                 };
                               } else if(resultadoAccion){
-  
                                  return {
-  
                                     key: action,
-  
                                     generated:resultadoAccion
-  
                                 };
-  
                             }else{
                                 await rollBackTokens(saldoActual, currentUserEmail); // Devolver tokens al saldo original
-  
                                 return {
-  
                                     key: action,
-  
                                     generated: {
-  
                                         texto: "Oops! Fallo en la generación de  (no se ejecuto la accion). Tus tokens han sido restaurados. Inténtalo de nuevo.",
-  
                                         imagen: null
-  
                                     }
-  
                                 };
   }
   
                         } else {
-  
                         return { key: action, generated: { texto: `Error: No se pudieron descontar los tokens ^saldoDespuesDelDescuento:${saldoDespuesDelDescuento}, currentUserEmail: ${currentUserEmail}.`, imagen: null } };
-  
                         }
-  
                     } else {
-  
                         return { key: action, generated: { texto: "Saldo Insuficiente.", imagen: null } }; // Estructura consistente
-  
                     }
-  
                 }
-  
             }
-  
-  
-  
-   
-
-  
   const saveGenData = async () => {
     let item = itemActual;
     let bodyData = dataItemActual;
-    console.log(`######### saveGenData ItemActual #########`)
-    console.log(itemActual)
-    console.log(`######### saveGenData dataItemActual  #########`)
-    console.log(dataItemActual)
       const res = await fetch(`/api/${item}?p=${idProyecto}`,  {
         method: "POST",
         body: JSON.stringify(bodyData),
@@ -377,8 +237,6 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       });
       const data = await res.json();
       if(data){
-        console.log(data);
-        alert(item+' guardado correctamente!');
         if(item=="estudio-mercado"){
           setExisteEstudio(true); // Marca como existente en BD tras guardar
           setCurrentStep(2);
@@ -391,36 +249,19 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       }else{
         alert(item+' Oops! no se ha guardado '+item)
       }
-      
-      
-      
     };
-
-  // Efecto para verificar existencia de datos cuando cambia el paso
-  
   useEffect(() => {
      setIdProyecto(idProyectoD)
-    
-
     const projectId=idProyectoD;
-
-    //console.log(`######### useEffect  projectId  ${projectId}  #########`)
-        
-
     const checkExistence = async () => {
       setIsLoading(true);
       setError(null);
-      
-
       try {
         if (currentStep === 1) {
-          
           setItemActual("estudio-mercado")
           const estudioExistente = await GWV('check',projectId,"estudio-mercado");
           setExisteEstudio(!!estudioExistente);
-          //console.log(`######### checkExistence  estudioExistente  ${estudioExistente}  #########`)
           if (estudioExistente) {
-            //console.log(`#$######## checkExistence  estudioExistente  ${estudioExistente}  #########`)
             setDataEstudioMercado(estudioExistente);
           }
         } else if (currentStep === 2) {
@@ -444,13 +285,10 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         setIsLoading(false);
       }
     };
-
-    // Solo ejecuta la verificación si no estamos ya cargando
     if (!isLoading) {
       checkExistence();
     }
   }, [currentStep, idProyecto]); // Añadir isLoading a las dependencias si quieres re-ejecutar en cambios de carga
-
   useEffect(() => {
       const getEstudioPrice = async () => {
         const responsePrice = await getPrice("generate-estudio")
@@ -459,8 +297,6 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         }
       }
       getEstudioPrice();
-    
-
     const getEstrategiaPrice = async () => {
       const responsePrice = await getPrice("generate-estrategia")
       if(responsePrice){
@@ -468,7 +304,6 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       }
     }
     getEstrategiaPrice();
-
     const getCampaniaPrice = async () => {
       const responsePrice = await getPrice("generate-campania")
       if(responsePrice){
@@ -476,24 +311,16 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       }
     }
     getCampaniaPrice();
-  
   },[]);
-
-  
-  
   const handleGenerateEstudio = async () => {
     setEmail(session?.user?.email as string)
     setIsLoading(true);
     setError(null);
-
     try {
-
       setItemActual("estudio-mercado");
-      // Obtener el precio de los tokens para esta acción
       const price = await getPrice("generate-estudio");
       if (!price) throw new Error("No se pudo obtener el precio de los tokens.");
       setPriceEstudio(price)
-      // Consumir tokens y generar el estudio
       const itemObjectEstudio = {
         mode: 'generate',
         projectId: idProyecto, 
@@ -502,31 +329,23 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       const estudioData = await useTokens("generate-estudio",itemObjectEstudio)
       setDataEstudioMercado(estudioData?.generated as EstudioMercadoData);
       setDataItemActual(estudioData?.generated as EstudioMercadoData);
-      // Actualizar el saldo después de consumir tokens
-      //const updatedSaldo = await validarSaldo(session?.user?.email as string);
     } catch (err: any) {
       setError("Error al generar estudio de mercado: " + err.message);
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleGenerateEstrategia = async () => {
     setIsLoading(true);
     setError(null);
-
     try {
-      // Asegúrate de que dataEstudioMercado no sea null antes de pasarlo
       if (!dataEstudioMercado) {
         throw new Error("Estudio de mercado es requerido para generar estrategia.");
       }
       setItemActual("estrategia-marketing");
-
-      // Obtener el precio de los tokens para esta acción
       const price = await getPrice("generate-estrategia");
       if (!price) throw new Error("No se pudo obtener el precio de los tokens.");
       setPriceEstrategia(price)
-      // Consumir tokens y generar la estrategia
       const itemObjectEstrategia = {
         mode: 'generate',
         projectId: idProyecto, 
@@ -534,32 +353,25 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
         estudio: dataEstudioMercado
       }
       const estrategiaData = await useTokens("generate-estrategia",itemObjectEstrategia)
-
       setDataEstrategiaMarketing(estrategiaData?.generated as EstrategiaMarketingData);
       setDataItemActual(estrategiaData?.generated as EstrategiaMarketingData);
-  
     } catch (err: any) {
       setError("Error al generar estrategia de marketing: " + err.message);
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleGenerateCampania = async () => {
     setIsLoading(true);
     setError(null);
-
     try {
-      // Asegúrate de que dataEstrategiaMarketing no sea null
       if (!dataEstrategiaMarketing) {
         throw new Error("Estrategia de marketing es requerida para generar campaña.");
       }
       setItemActual("campania-marketing");
-      // Obtener el precio de los tokens para esta acción
       const price = await getPrice("generate-campania");
       if (!price) throw new Error("No se pudo obtener el precio de los tokens.");
       setPriceCampania(price)
-      // Consumir tokens y generar la campaña
       const itemObjectCampania = {
         mode: 'generate',
         projectId: idProyecto, 
@@ -570,20 +382,17 @@ const MarketingWorkflow: React.FC<MarketingWorkflowProps> = ({idProyectoD, initi
       const campaniaData = await useTokens("generate-campania",itemObjectCampania)
       setDataCampaniaMarketing(campaniaData?.generated as CampaniaMarketingData);
       setDataItemActual(campaniaData?.generated as CampaniaMarketingData);
-
     } catch (err: any) {
       setError("Error al generar campaña de marketing: " + err.message);
     } finally {
       setIsLoading(false);
     }
   };
-
   const steps: WorkflowStep[] = [
     { number: 1, title: "Estudio de Mercado", completed: !!dataEstudioMercado },
     { number: 2, title: "Estrategia de Marketing", completed: !!dataEstrategiaMarketing },
     { number: 3, title: "Campaña de Marketing", completed: !!dataCampaniaMarketing }
   ];
-
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-6">

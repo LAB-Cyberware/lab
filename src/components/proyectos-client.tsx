@@ -158,7 +158,7 @@ const ProyectosClient: React.FC = () => {
                   <br />
                   Marketing
                 </Link>
-                <Link href={`/contents-manager/${proyecto._id}`} className="app-card-button boton-mkt">
+                <Link href={`/contents-manager-plus/${proyecto._id}`} className="app-card-button boton-mkt">
                   <FontAwesomeIcon icon={faBullhorn}className="icon" />
                   <br />
                   Contenido
