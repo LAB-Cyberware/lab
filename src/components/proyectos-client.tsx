@@ -148,7 +148,7 @@ const ProyectosClient: React.FC = () => {
                   <br />
                   Catálogo
                 </Link>
-                <Link href={`/appviewer/?id=${proyecto._id}`} className="app-card-button boton-app">
+                <Link href={`/appviewer/${proyecto._id}`} className="app-card-button boton-app">
                   <FontAwesomeIcon icon={faMobileScreenButton} className="icon"  />
                   <br />
                   eWaveApp
