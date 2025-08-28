@@ -56,7 +56,7 @@ const BuyTokens: React.FC<BuyTokensProps> = ({userEmail}) => {
   */
  
   const PayFlow = () => {
-    window.open('https://sandbox.flow.cl/btn.php?token=z0711eb2b3546fb95ddc3d7a9eade634dd837afb')
+    window.open('https://www.flow.cl/app/web/pagarBtnPago.php?token=ic6f17f5f08187341e2fafcff2a279f482062911')
     return;
   }
 
