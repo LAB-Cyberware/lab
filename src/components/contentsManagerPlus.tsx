@@ -22,7 +22,7 @@ interface GeneratedContent {
   imagen: string | null;
 }
 
-const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ estrategia,campanias,idProyecto }) => {
+const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ estrategia,campanias,idProyecto,estudio,maker }) => {
   
     const { data: session, status } = useSession();
     const currentUserEmail = session?.user?.email;
@@ -38,12 +38,8 @@ const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ estrategia,cam
 
 
     // DATA PARA LA CREACION DE CAMPAÑA
-      const [dataCampaniaMarketing, setDataCampaniaMarketing] = useState<CampaniaMarketingData | null>(null);
-      const [dataMaker, setMaker] = useState<any | null>(null);
-    
+    const [dataCampaniaMarketing, setDataCampaniaMarketing] = useState<CampaniaMarketingData | null>(null);
       // Estados para controlar la existencia en BD (boolean o null inicial)
-      const [existeEstudio, setExisteEstudio] = useState<boolean | null>(null);
-      const existeEstrategia = estrategia;
 
       //  SI NO HAY ESTRATEGIA 
           // mostrar boton IR A STEP BY STEP MKT FLOW
@@ -92,24 +88,15 @@ const handleAddCampaniaClick = (campania: any) => {
   };
 
   const generateCampania = async (newCampania: any) => {
-
-    //traer DATA NECESARIA
-      // maker
-      const makerData = await GWV('check',idProyecto,"maker");
-      if(makerData){setMaker(makerData)}
-      // estudio
-      const estudioExistente = await GWV('check',idProyecto,"estudio-mercado");
-      if(estudioExistente){setExisteEstudio(estudioExistente)}
-      // estrategia
-      const estrategiaExistente = await GWV('check',idProyecto,"estrategia-marketing");
-
-      if(makerData && estudioExistente && estrategiaExistente){
+      if(maker && estudio && estrategia){
         try {
           const payload = {
-            maker:"",
-            estudio:"",
-            estrategia:"",
-            item:"campania-marketing"
+            maker:"maker",
+            estudio:"estudio",
+            estrategia:"estrategia",
+            item:"campania-marketing",
+            mode: 'generate',
+            projectId: idProyecto, 
           }
           const res = await fetch(`/api/willi/`, {
             method: "POST",
@@ -117,7 +104,7 @@ const handleAddCampaniaClick = (campania: any) => {
             headers: {
               "Content-Type": "application/json"           
             },
-          });
+      });
           if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || `Error al eliminar: ${res}`);
@@ -131,7 +118,7 @@ const handleAddCampaniaClick = (campania: any) => {
           alert(`Error al eliminar: ${error.message}`);
         }
       }else{
-        alert("se requiere generar el Estudio de Mercado y la Estrategia General de Marketing para el Proyecto, ejecuta el Paso a Paso de Marketing para poder genear una Campaña.")
+        alert("se requiere generar el Estudio de Mercado y la Estrategia General de Marketing para el Proyecto, ejecuta el Paso a Paso de Marketing para poder generar una Campaña.")
       }  
 
     

@@ -55,6 +55,11 @@ const BuyTokens: React.FC<BuyTokensProps> = ({userEmail}) => {
     }
   */
  
+  const PayFlow = () => {
+    window.open('https://sandbox.flow.cl/btn.php?token=z0711eb2b3546fb95ddc3d7a9eade634dd837afb')
+    return;
+  }
+
 
   return (
     <div className="user-dashboard-container">
@@ -64,10 +69,17 @@ const BuyTokens: React.FC<BuyTokensProps> = ({userEmail}) => {
 
       <div className="gift-message-box">
         <p className="gift-message-text">
-          <span className="highlight">¡Felicidades!</span> Estás a punto de dar un salto Cuantico. ¡Súbete a la Ola eWave! Pronto habilitaremos el pago en linea, por ahora, agiliza el proceso de recarga de Tokens en el siguiente enlace:
+          <span className="highlight">¡Felicidades!</span> Estás a punto de dar un salto Cuantico. ¡Súbete a la Ola eWave! Logra tu proceso de recarga de Tokens en cualquiera de los siguientes enlaces:
         </p>
 
-        <a href={`https://wa.me/56920905973?text=Quiero%20recargar%20tokens%20eWave%for-${userEmail}`}><button className="contact-button">Recargar Tokens</button></a>
+        <button className='token-charge'>
+            <a href={`https://wa.me/56920905973?text=Quiero%20recargar%20tokens%20eWave%for-${userEmail}`}>
+              Recargar Tokens
+            </a>
+          </button>
+        <button onClick={PayFlow} className='hover:cursor-pointer'>
+          <img src={'https://sandbox.flow.cl/img/botones/btn-pagar-celeste.png'} />
+        </button>
 
       </div>
     </div>

@@ -74,6 +74,15 @@ form h1 {
   margin: 15px; /* For .upload-button */
   padding: 10px; /* For .upload-button */
 }
+.token-charge {
+  color: #fff;
+  font-weight: bolder;
+  border-radius: 50px;
+  display: block; /* For .upload-button, .button-add-proyecto */
+  margin: auto; /* For .upload-button */
+  margin-bottom: 20px;
+  padding: 10px; /* For .upload-button */
+}
 
 /* Specific backgrounds for buttons, using eWave colors */
 .upload-button {
@@ -90,6 +99,9 @@ form h1 {
 .welcome-button,
 .contact-button {
   background-color: var(--ewave-blue); /* Replaced green/indigo/various blues with eWave Blue */
+}
+.token-charge {
+  background-color: var(--ewave-blue);
 }
 
 .boton-cancelar {
