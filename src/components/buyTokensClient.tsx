@@ -69,7 +69,7 @@ const BuyTokens: React.FC<BuyTokensProps> = ({userEmail}) => {
 
       <div className="gift-message-box">
         <p className="gift-message-text">
-          <span className="highlight">¡Felicidades!</span> Estás a punto de dar un salto Cuantico. ¡Súbete a la Ola eWave! Logra tu proceso de recarga de Tokens en cualquiera de los siguientes enlaces:
+          <span className="highlight">¡Felicidades!</span> Estás a punto de dar un salto Cuantico. ¡Súbete a la Ola eWave! Logra tu  proceso de recarga de Tokens en cualquiera de los siguientes enlaces:
         </p>
 
         <button className='token-charge'>
