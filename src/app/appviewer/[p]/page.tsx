@@ -16,7 +16,7 @@ export default async function DynamicPage({ params }: CampaniaMarketingPageProps
     // entre el Server Component y una API Route dentro del mismo proyecto;
     // en su lugar, se invoca directamente el handler de la API Route.
     // `process.env.NEXT_PUBLIC_BASE_URL` debe estar configurado en tu `.env.local`
-    const apiUrl = `/api/maker?p=${itemId as string}`; // Ruta a tu API Route dinámica
+    const apiUrl = `${process.env.NEXTAUTH_URL}/api/maker?p=${itemId as string}`; // Ruta a tu API Route dinámica
 
     const res = await fetch(apiUrl, {
       cache: 'no-store', // Opcional: Deshabilita el cacheo para siempre obtener datos frescos
@@ -33,6 +33,8 @@ export default async function DynamicPage({ params }: CampaniaMarketingPageProps
          let mydata = response.data;
           if(mydata){
             data = mydata[0]
+            console.log("$$$$$$$$$$$$$$$  DATA Maker APPVIEWER")
+            console.log(data)
       }else{
          // Captura cualquier error de red o de ejecución durante el fetch.
     console.error('Error en Jsonificando:');

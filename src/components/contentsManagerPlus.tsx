@@ -34,7 +34,8 @@ const ContentManagerPlus: React.FC<ContentsManegerPlusProps> = ({ estrategia,cam
     const [saldo, setSaldo] = useState<any | null>(null);
     const [isAddCampaniaModalOpen, setAddCampaniaModalOpen] = useState(false);
     const [newCampania, setNewCampania] = useState<any | null>(null);
-    const [newInfoCampania,setInfoCampania] =  useState<any | null>(null);
+
+    const [newInfoCampania, setInfoCampania] = useState<any|null>(null)
 
 
     // DATA PARA LA CREACION DE CAMPAÑA
@@ -79,9 +80,14 @@ const handleAddCampaniaClick = (campania: any) => {
     setAddCampaniaModalOpen(true);
   };
 
-  const handelSaveCampania = async () => { // Convertir a async para esperar la eliminación
-    if (newCampania) {
-      await generateCampania(newCampania); // Esperar a que se complete la eliminación
+  const handelGenerateCampania = async (infoCampania:any) => {
+
+    console.log("&#&#&#&#&  infoCampania   &#&#&#&#&")
+    console.log(infoCampania)
+
+    setInfoCampania(infoCampania)
+    if (infoCampania) {
+      await generateCampania(infoCampania); // Esperar a que se complete la eliminación
       closeAddCampaniaModal();
     }
   };
@@ -340,9 +346,6 @@ const handleAddCampaniaClick = (campania: any) => {
               }
           }
 
-const handleChangeTarget = () => {
-  alert("change target")
-}
 
   useEffect(() => {
     const getThisPrice = async () => {
@@ -356,6 +359,12 @@ const handleChangeTarget = () => {
       setSaldo(validarSaldo(currentUserEmail))
       getThisPrice();
   }, []);
+
+const fechaHoyFull = new Date();
+const fechaHoy = fechaHoyFull.toISOString().substring(0,10); 
+const objetivos_ejemplo = `Ejemplo: ${estrategia?.objetivos_generales[0].descripcion}. O ${estrategia?.objetivos_generales[1].descripcion}. O ${estrategia?.objetivos_generales[2].descripcion} `
+
+
 
   const SelectorCampanias: React.FC<any> = () =>{
     return(
@@ -377,37 +386,23 @@ const handleChangeTarget = () => {
         <AddCampaniaModal
         isOpen={isAddCampaniaModalOpen}
         onClose={closeAddCampaniaModal}
-        onConfirm={handelSaveCampania}
+        onConfirm={handelGenerateCampania}
         title="Configurar Nueva Campaña"
         message={
           <>
             <p>Establece los lineamientos que harán única a esta campaña personalizada</p>
            
-              <div className="mt-2 p-3 bg-gray-100 rounded">
-                <p>
-                  <strong>Objetivo</strong>
-                  <textarea onChange={handleChange}   placeholder="Ejemplo: Vender el servicio de asesorías... o Dar a conocer nuestra promoción de Verano..."></textarea>
-                </p>
-                <p>
-                  <input onChange={handleChange} type="checkbox" name="target-default" id="target-default" value="1" defaultChecked></input>usar Target de Negocio (<strong>{estrategia?.analisis_mercado_target.identificacion_target}</strong>)  
-                  <br />o <br />
-
-                  <strong>Definir un Target Especifico de Campaña</strong>
-                  <textarea onChange={handleChange}  placeholder="Al definir un Target Especifico de Campaña aqui, reemplazará automaticamente al target de Negocio."></textarea>
-                </p>
-                 <p>
-                  <strong>Fecha Inicio </strong>(Fecha Primera Publicacion)
-                  <input onChange={handleChange}   type="date" name="fecha-inicio" id="fecha-inicio"></input>
-                </p>
-                 <p>
-                  <strong>Diracion (Días)</strong>
-                  <input onChange={handleChange}  type="number" min="5" max="30" step="5" defaultValue="5"></input> 
-                </p>
-              </div>
+              
           
             <p className="mt-2 text-sm text-gray-500">Se generará una campaña completa con esta información y basado en toda la informacion del proyecto, estudio de mercado y estrategia general de marketing.</p>
           </>
         }
+        idProyecto={idProyecto}
+        target={estrategia?.analisis_mercado_target.identificacion_target} 
+        duracion={5}
+        objetivo={objetivos_ejemplo}
+        fecha_inicio={fechaHoy}
+
       />
 
 
@@ -418,14 +413,7 @@ const handleChangeTarget = () => {
           );
         }
   
-    const handleChange = (
-      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
-      setInfoCampania({ ...newInfoCampania, [e.target.name]: e.target.value });
-    };
-  
-
-
+   
 
 
 
@@ -512,23 +500,17 @@ if(selectedCampania){
                 <div key={dia.fecha} className="p-4 bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
                   <h5 className="text-base font-semibold text-gray-900 mb-2">Información Técnica para publicación del <span className="text-md font-bold text-indigo-700 mb-2">Día: {dia.nombre} ({dia.fecha}) hora: [{post.hora}]</span></h5>
                   
-<div className={commonClasses.postContainer}><p><strong>objetivo:</strong> {post.objetivo}</p></div>
-<div className={commonClasses.postContainer}><p><strong>definicion_arte:</strong> {post.definicion_arte}</p></div>
-<div className={commonClasses.postContainer}><p><strong>Título:</strong> {post.titulo}</p></div>
-<div className={commonClasses.postContainer}><p><strong>tema:</strong> {post.tema}</p></div>
-<div className={commonClasses.postContainer}><p><strong>Contenido:</strong> {post.texto}</p></div>
-<div className={commonClasses.postContainer}><p><strong>CTA:</strong> {post.cta}</p></div>
-<div className={commonClasses.postContainer}>{post.imagen && <p><strong>Imagen:</strong> {post.imagen}</p>}</div>
-<div className={commonClasses.postContainer}><p><strong>fundamento:</strong> {post.fundamento}</p></div>
-<div className={commonClasses.postContainer}><p><strong>recomendacion_creacion:</strong> {post.recomendacion_creacion}</p></div>  
-<div className={commonClasses.postContainer}><p><strong>recomendacion_publicacion_seguimiento:</strong> {post.recomendacion_publicacion_seguimiento}</p></div>  
-<div className={commonClasses.postContainer}><p><strong>ESTADO:</strong> {post.estado}</p></div> 
-
-                    
-
-                    
-
-
+                    <div className={commonClasses.postContainer}><p><strong>objetivo:</strong> {post.objetivo}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>definicion_arte:</strong> {post.definicion_arte}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>Título:</strong> {post.titulo}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>tema:</strong> {post.tema}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>Contenido:</strong> {post.texto}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>CTA:</strong> {post.cta}</p></div>
+                    <div className={commonClasses.postContainer}>{post.imagen && <p><strong>Imagen:</strong> {post.imagen}</p>}</div>
+                    <div className={commonClasses.postContainer}><p><strong>fundamento:</strong> {post.fundamento}</p></div>
+                    <div className={commonClasses.postContainer}><p><strong>recomendacion_creacion:</strong> {post.recomendacion_creacion}</p></div>  
+                    <div className={commonClasses.postContainer}><p><strong>recomendacion_publicacion_seguimiento:</strong> {post.recomendacion_publicacion_seguimiento}</p></div>  
+                    <div className={commonClasses.postContainer}><p><strong>ESTADO:</strong> {post.estado}</p></div> 
 
                   {generatedContent && (generatedContent.texto || generatedContent.imagen) && !currentPostError && (
                     <div className={commonClasses.generatedContentContainer}>

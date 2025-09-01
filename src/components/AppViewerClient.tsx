@@ -36,8 +36,11 @@ export default function AppViewerClient(data:any) {
     const [isLoadingP, setIsLoadingP] = useState(true);
     const [errorP, setErrorP] = useState<string | null>(null);
 
-    const AppProyecto=data?.proyecto;
-    const AppCatalogo=data?.catalogo;
+    console.log("$$$$$$ data:")
+    console.log(data.data)
+
+    const AppProyecto=data?.data.proyecto;
+    const AppCatalogo=data?.data.catalogo;
     const nombreProyecto=AppProyecto?.nombre;
     const textoProyecto=AppProyecto?.texto;
     const fraseProyecto=AppProyecto?.frase;
