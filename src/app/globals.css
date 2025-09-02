@@ -581,14 +581,14 @@ color:var(--ewave-cyan); /* Replaced indigo-500 with eWave Cyan */
 }
 
 .product-name {
-  height: 57px;
+  height: fit-content;
   @apply text-lg font-semibold mb-2;
   color: gray; /* Kept gray-700 to gray */
 }
 
 .product-description {
   @apply text-sm mb-3;
-  height: 260px;
+  height: fit-content;
   color: gray; /* Kept gray-600 to gray */
 }
 
