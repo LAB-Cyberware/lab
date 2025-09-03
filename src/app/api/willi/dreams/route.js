@@ -3,12 +3,8 @@ import { NextResponse } from "next/server";
 import getPrompt from "@/ia-utils/templates-Prompts";
 import jsonPure from "@/utils/jsonPure";
 import jsonToPrompt from "@/utils/JsonToPrompt";
-
-//gemini-pro-vision
-      //gemini-2.0-flash-preview-image-generation
-      import {
-        GoogleGenAI,
-      } from '@google/genai';    
+import { GoogleGenAI } from '@google/genai';
+import { overlayImagesServer } from "@/utils/LogoGenerator-Server";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
 const model = genAI.getGenerativeModel({
@@ -23,104 +19,86 @@ const model = genAI.getGenerativeModel({
   tools: [
     {
       codeExecution: {},
-    },
-    
+    }
   ]
 });
 
-
 export async function POST(req) {
   const dataR = await req.json();
-  //console.log("@@@@@@@ POST POST ")
-  //console.log(dataR)
+  
   try {
-    
-    const finalPrompt = getPrompt(dataR.item,jsonToPrompt(dataR.maker),jsonToPrompt(dataR.estudio),jsonToPrompt(dataR.estrategia),jsonToPrompt(dataR.post));
-    if(dataR.item=="post-final-img"){
-        async function main() {
-        let info;
-        const ai = new GoogleGenAI({
-          apiKey: process.env.GOOGLE_GEMINI_API_KEY,
-        });
-        const config = {
-          responseModalities: [
-              'IMAGE',
-              'TEXT',
-          ],
-          responseMimeType: 'text/plain',
-          aspectRatio: "1:1",
-        };
+    const finalPrompt = getPrompt(
+      dataR.item,
+      jsonToPrompt(dataR.maker),
+      jsonToPrompt(dataR.estudio),
+      jsonToPrompt(dataR.estrategia),
+      jsonToPrompt(dataR.post)
+    );
 
-        
-        const model = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
-        const contents = [
-          {
-            role: 'user',
-            parts: [
-              {
-                text: `${finalPrompt}`,
-              },
-            ],
-          },
-        ];
+    if (dataR.item === "post-final-img") {
+      const ai = new GoogleGenAI({
+        apiKey: process.env.GOOGLE_GEMINI_API_KEY,
+      });
       
-        const response = await ai.models.generateContentStream({
-          model,
-          config,
-          contents,
-        });
-        for await (const chunk of response) {
-          if (!chunk.candidates || !chunk.candidates[0].content || !chunk.candidates[0].content.parts) {
-            continue;
-          }
-          if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
-          //  const fileName = `${process.env.POST_IMAGES_DIR}/${fileMetaName}`;
-            const inlineData = chunk.candidates[0].content.parts[0].inlineData;
-          //  const fileExtension = mime.getExtension(inlineData.mimeType || '');
-          //  const buffer = Buffer.from(inlineData.data || '', 'base64');
-          //  saveBinaryFile(`${fileName}.${fileExtension}`, buffer);
-            //savePostImg(`${fileName}.${fileExtension}`)
-            return inlineData
-          }
-          else {
-            info = chunk.text
-          //  console.log(chunk.text);
-          }
+      const config = {
+        responseModalities: ['IMAGE', 'TEXT'],
+        responseMimeType: 'text/plain',
+        aspectRatio: "1:1",
+      };
+
+      const modelImg = process.env.GOOGLE_GEMINI_API_MODET_IMAGE;
+      const contents = [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: finalPrompt,
+            },
+          ],
+        },
+      ];
+
+      const response = await ai.models.generateContentStream({
+        model: modelImg,
+        config,
+        contents,
+      });
+
+      for await (const chunk of response) {
+        if (!chunk.candidates || !chunk.candidates[0].content || !chunk.candidates[0].content.parts) {
+          continue;
+        }
+        
+        if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
+          const inlineData = chunk.candidates[0].content.parts[0].inlineData;
+
+          const baseImageData = `data:${inlineData.mimeType};base64,${inlineData.data}`;
+          
+          const imageWithLogo = await overlayImagesServer(baseImageData, 'epic-media-wave-logo.png');
+          
+          const base64Data = imageWithLogo.split(',')[1];
+          
+          const williArray = [{ 
+            data: {
+              mimeType: 'image/png',
+              data: base64Data
+            }
+          }];
+          
+          return NextResponse.json(williArray);
         }
       }
+    } 
+    else {
+      const result = await model.generateContent(finalPrompt);
+      const williTxt = result.response.text();
+      const willJSON = jsonPure(williTxt);
+      const data = JSON.parse(willJSON);
       
-      const result_img = await main(); 
-      let williTxt = result_img;
-      console.log("WILLI : williTxtImg")
-      console.log(williTxt)
-      let willJSON = jsonPure(williTxt)
-      let williArray = new Array();
-      williArray.push(JSON.parse(willJSON))
-      let data = williArray;
-
-      return NextResponse.json(data);
-    }else{
-      const result = await model.generateContent(finalPrompt); 
-      let williTxt = result.response.text()
-      
-      console.log("WILLI : williTxt")
-      console.log(williTxt)
-
-      
-     // console.log("++++++++ WILLI Generate content say : williTxt +++++++++")
-     // console.log(williTxt)
-
-      let willJSON = jsonPure(williTxt)
-      let williArray = new Array();
-      williArray.push(JSON.parse(willJSON))
-      let data = williArray[0];
-      //console.log("++++++++ WILLI Generate content say : data +++++++++")
-      //console.log(data)
       return NextResponse.json(data);
     }
 
   } catch (error) {
-   // console.error("Error generating content:", error);
     return NextResponse.json({ error: `Failed to generate content ${error}` }, { status: 500 });
   }
 }
